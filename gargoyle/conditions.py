@@ -85,6 +85,9 @@ class Choice(Field):
 
 class Range(Field):
     def is_active(self, condition, value):
+        if not isinstance(value, six.integer_types):
+            return False
+        condition = list(map(int, condition.split('-')))
         return value >= condition[0] and value <= condition[1]
 
     def validate(self, data):

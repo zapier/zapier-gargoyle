@@ -8,6 +8,8 @@ Pending Release
 ---------------
 
 * New release notes here
+* Fixed the splitting of ``Range`` conditions, a merge of disqus/gargoyle#55,
+  thanks @matclayton.
 
 1.1.1 (2016-01-15)
 ------------------
