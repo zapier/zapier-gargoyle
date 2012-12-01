@@ -66,7 +66,8 @@ class IPAddressConditionSet(RequestConditionSet):
         if field_name == 'percent':
             return sum([int(x) for x in instance.META['REMOTE_ADDR'].split('.')])
         elif field_name == 'ip_address':
-            return instance.META['REMOTE_ADDR']
+            # use our better internalized ip middleware
+            return getattr(instance, 'ip', instance.META['REMOTE_ADDR'])
         elif field_name == 'internal_ip':
             return instance.META['REMOTE_ADDR'] in settings.INTERNAL_IPS
         return super(IPAddressConditionSet, self).get_field_value(instance, field_name)
