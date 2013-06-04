@@ -129,7 +129,7 @@ $(document).ready(function () {
 
         $(this).
             parents("tr:first").
-            find("div[data-path=" + field[0] + "." + field[1] + "]").show();
+            find("div[data-path='" + field[0] + "." + field[1] + "']").show();
     });
 
     $("div.conditionsForm form").live("submit", function (ev) {
@@ -154,7 +154,7 @@ $(document).ready(function () {
 
         api(GARGOYLE.addCondition, data, function (swtch) {
             var result = $("#switchData").tmpl(swtch);
-            $("table.switches tr[data-switch-key="+ data.key + "]").replaceWith(result);
+            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
         });
     });
 
@@ -172,7 +172,7 @@ $(document).ready(function () {
 
         api(GARGOYLE.delCondition, data, function (swtch) {
             var result = $("#switchData").tmpl(swtch);
-            $("table.switches tr[data-switch-key="+ data.key + "]").replaceWith(result);
+            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
         });
 
     });
@@ -208,7 +208,7 @@ $(document).ready(function () {
 
                     $.facebox.close();
                 } else {
-                    $("table.switches tr[data-switch-key=" + curkey + "]").replaceWith(result);
+                    $("table.switches tr[data-switch-key='" + curkey + "']").replaceWith(result);
                     $.facebox.close();
                 }
                 result.click();

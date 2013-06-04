@@ -54,7 +54,7 @@ setup(
     zip_safe=False,
     install_requires=[
         'django-modeldict-yplan>=1.5.0',
-        'nexus-yplan>=1.1.0',
+        'nexus-yplan>=1.2.0',
         'django-jsonfield>=0.9.2,!=0.9.13',
     ],
     license='Apache License 2.0',

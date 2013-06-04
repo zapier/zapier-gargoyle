@@ -11,6 +11,8 @@ Pending Release
 * Fixed the splitting of ``Range`` conditions, a merge of disqus/gargoyle#55,
   thanks @matclayton.
 * Fixed the parsing of ``Range`` conditions for the Nexus admin interface.
+* Fixed the Nexus interface to work with Switches that contain dots in their
+  names, a merge of disqus/gargoyle#73, thanks @Raekkeri.
 
 1.1.1 (2016-01-15)
 ------------------
