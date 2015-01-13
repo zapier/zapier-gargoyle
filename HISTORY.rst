@@ -14,6 +14,8 @@ Pending Release
 * Fixed the Nexus interface to work with Switches that contain dots in their
   names, a merge of disqus/gargoyle#73, thanks @Raekkeri.
 * Removed all inline javascript.
+* Added ``ifnotswitch`` template tag, a merge of disqus/gargoyle#92, thanks
+  @mrfuxi.
 
 1.1.1 (2016-01-15)
 ------------------
