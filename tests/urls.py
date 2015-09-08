@@ -5,16 +5,17 @@
 
 try:
     # Django <1.6
-    from django.conf.urls.defaults import *
+    from django.conf.urls.defaults import patterns, url
 except ImportError:
     # Django >=1.6
-    from django.conf.urls import *
+    from django.conf.urls import patterns, url
 
 
 def foo(request):
     from django.http import HttpResponse
     return HttpResponse()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url('', foo, name='gargoyle_test_foo'),
 )

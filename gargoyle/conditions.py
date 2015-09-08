@@ -103,8 +103,13 @@ class Range(Field):
     def render(self, value):
         if not value:
             value = ['', '']
-        return mark_safe('<input type="text" value="%s" placeholder="from" name="%s[min]"/> - <input type="text" placeholder="to" value="%s" name="%s[max]"/>' %
-                         (escape(value[0]), escape(self.name), escape(value[1]), escape(self.name)))
+        return mark_safe(
+            '<input type="text" value="%s" placeholder="from" name="%s[min]"/>'
+            ' - '
+            '<input type="text" placeholder="to" value="%s" name="%s[max]"/>'
+            %
+            (escape(value[0]), escape(self.name), escape(value[1]), escape(self.name))
+        )
 
     def display(self, value):
         value = value.split('-')

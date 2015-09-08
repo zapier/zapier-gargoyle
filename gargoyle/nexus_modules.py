@@ -84,15 +84,16 @@ class GargoyleModule(nexus.NexusModule):
         except ImportError:  # Django<=1.4
             from django.conf.urls.defaults import patterns, url
 
-        urlpatterns = patterns('',
-                               url(r'^add/$', self.as_view(self.add), name='add'),
-                               url(r'^update/$', self.as_view(self.update), name='update'),
-                               url(r'^delete/$', self.as_view(self.delete), name='delete'),
-                               url(r'^status/$', self.as_view(self.status), name='status'),
-                               url(r'^conditions/add/$', self.as_view(self.add_condition), name='add-condition'),
-                               url(r'^conditions/remove/$', self.as_view(self.remove_condition), name='remove-condition'),
-                               url(r'^$', self.as_view(self.index), name='index'),
-                               )
+        urlpatterns = patterns(
+            '',
+            url(r'^add/$', self.as_view(self.add), name='add'),
+            url(r'^update/$', self.as_view(self.update), name='update'),
+            url(r'^delete/$', self.as_view(self.delete), name='delete'),
+            url(r'^status/$', self.as_view(self.status), name='status'),
+            url(r'^conditions/add/$', self.as_view(self.add_condition), name='add-condition'),
+            url(r'^conditions/remove/$', self.as_view(self.remove_condition), name='remove-condition'),
+            url(r'^$', self.as_view(self.index), name='index'),
+        )
 
         return urlpatterns
 

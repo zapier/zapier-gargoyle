@@ -148,8 +148,8 @@ class SwitchManager(ModelDict):
 
 if hasattr(settings, 'GARGOYLE_CACHE_NAME'):
     gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
-                         auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True),
-                         cache=get_cache(settings.GARGOYLE_CACHE_NAME))
+                             auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True),
+                             cache=get_cache(settings.GARGOYLE_CACHE_NAME))
 else:
     gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
-                         auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True))
+                             auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True))

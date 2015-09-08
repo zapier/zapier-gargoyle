@@ -6,15 +6,14 @@ gargoyle
 :license: Apache License 2.0, see LICENSE for more details.
 """
 
-__all__ = ('gargoyle', 'ConditionSet', 'autodiscover', 'VERSION')
+from gargoyle.manager import gargoyle
 
 try:
-    VERSION = __import__('pkg_resources') \
-        .get_distribution('gargoyle').version
+    VERSION = __import__('pkg_resources').get_distribution('gargoyle').version
 except Exception, e:
     VERSION = 'unknown'
 
-from gargoyle.manager import gargoyle
+__all__ = ('gargoyle', 'autodiscover', 'VERSION')
 
 
 def autodiscover():
