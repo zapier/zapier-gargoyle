@@ -18,8 +18,8 @@ __all__ = ('gargoyle', 'autodiscover', 'VERSION')
 
 def autodiscover():
     """
-    Auto-discover INSTALLED_APPS admin.py modules and fail silently when
-    not present. This forces an import on them to register any admin bits they
+    Auto-discover INSTALLED_APPS' gargoyle modules and fail silently when
+    not present. This forces an import on them to register any gargoyle bits they
     may want.
     """
     import copy
