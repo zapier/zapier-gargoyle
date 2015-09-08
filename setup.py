@@ -1,29 +1,16 @@
 #!/usr/bin/env python
-
 from setuptools import setup, find_packages
-
-try:
-    import multiprocessing
-except:
-    pass
-
-tests_require = [
-    'Django>=1.4,<1.8',
-    'django-nose',
-    'nose',
-    'South',
-]
 
 install_requires = [
     'django-modeldict>=1.2.0',
     'nexus>=0.2.3',
-    'django-jsonfield>=0.9.2,<0.9.13',
+    'django-jsonfield>=0.9.2,!=0.9.13',
 ]
 
 
 setup(
     name='gargoyle',
-    version='0.11.0',
+    version='0.11.0+yplan1',
     author='DISQUS',
     author_email='opensource@disqus.com',
     url='https://github.com/disqus/gargoyle',
@@ -32,9 +19,6 @@ setup(
     zip_safe=False,
     install_requires=install_requires,
     license='Apache License 2.0',
-    tests_require=tests_require,
-    extras_require={'test': tests_require},
-    test_suite='runtests.runtests',
     include_package_data=True,
     classifiers=[
         'Framework :: Django',

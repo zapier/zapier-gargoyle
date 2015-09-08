@@ -31,7 +31,6 @@ import socket
 
 
 class APITest(TestCase):
-    urls = 'tests.urls'
 
     def setUp(self):
         self.user = User.objects.create(username='foo', email='foo@example.com')
