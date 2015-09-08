@@ -1,7 +1,8 @@
 from optparse import make_option
+
 from django.core.management.base import BaseCommand, CommandError
 
-from gargoyle.models import Switch, DISABLED, GLOBAL
+from gargoyle.models import DISABLED, GLOBAL, Switch
 
 
 class Command(BaseCommand):

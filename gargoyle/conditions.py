@@ -10,15 +10,14 @@ gargoyle.conditions
 # Credit to Haystack for abstraction concepts
 
 import datetime
+import itertools
 
+from django.core.validators import ValidationError
 from django.http import HttpRequest
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.core.validators import ValidationError
 
 from gargoyle.models import EXCLUDE
-
-import itertools
 
 
 def titlize(s):

@@ -13,5 +13,5 @@ end_of_line = lf
 [*.py]
 line_length=120
 multi_line_output=5
-known_third_party=django
-known_first_party=nexus,testapp
+known_third_party=django,nexus,south
+known_first_party=gargoyle,testapp

@@ -7,20 +7,17 @@ gargoyle.nexus_modules
 """
 
 import logging
-import nexus
 import os.path
-
 from functools import wraps
 
+import nexus
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseNotFound
 
-from gargoyle import gargoyle, autodiscover
-from gargoyle.helpers import dumps
-from gargoyle.models import Switch, DISABLED
+from gargoyle import autodiscover, gargoyle, signals
 from gargoyle.conditions import ValidationError
-from gargoyle import signals
-
+from gargoyle.helpers import dumps
+from gargoyle.models import DISABLED, Switch
 
 GARGOYLE_ROOT = os.path.dirname(__file__)
 

@@ -5,13 +5,12 @@ gargoyle.helpers
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-
-from django.core.serializers.json import DjangoJSONEncoder
-from django.http import HttpRequest
-
 import datetime
 import json
 import uuid
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.http import HttpRequest
 
 
 class MockRequest(HttpRequest):

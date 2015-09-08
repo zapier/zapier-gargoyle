@@ -2,32 +2,28 @@
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-
 import datetime
+import socket
 import sys
 
 from django.conf import settings
-from django.contrib.auth.models import User, AnonymousUser
+from django.contrib.auth.models import AnonymousUser, User
 from django.core.cache import cache
-from django.core.management.base import CommandError
 from django.core.management import call_command
-from django.http import HttpRequest, Http404, HttpResponse
-from django.test import TestCase
+from django.core.management.base import CommandError
+from django.http import Http404, HttpRequest, HttpResponse
 from django.template import Context, Template, TemplateSyntaxError
+from django.test import TestCase
 
 import gargoyle
-from gargoyle.builtins import IPAddressConditionSet, UserConditionSet, HostConditionSet
+from gargoyle.builtins import HostConditionSet, IPAddressConditionSet, UserConditionSet
 from gargoyle.decorators import switch_is_active
 from gargoyle.helpers import MockRequest
-from gargoyle.models import Switch, SELECTIVE, DISABLED, GLOBAL, INHERIT
 from gargoyle.management.commands.add_switch import Command as AddSwitchCmd
-from gargoyle.management.commands.remove_switch import (
-    Command as RemoveSwitchCmd
-)
+from gargoyle.management.commands.remove_switch import Command as RemoveSwitchCmd
 from gargoyle.manager import SwitchManager
+from gargoyle.models import DISABLED, GLOBAL, INHERIT, SELECTIVE, Switch
 from gargoyle.testutils import switches
-
-import socket
 
 
 class APITest(TestCase):

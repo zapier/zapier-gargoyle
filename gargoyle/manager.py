@@ -1,12 +1,10 @@
 from django.conf import settings
 from django.core.cache import get_cache
 from django.http import HttpRequest
-
-from gargoyle.models import Switch, DISABLED, SELECTIVE, GLOBAL, INHERIT, \
-    INCLUDE, EXCLUDE
-from gargoyle.proxy import SwitchProxy
-
 from modeldict import ModelDict
+
+from gargoyle.models import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE, Switch
+from gargoyle.proxy import SwitchProxy
 
 
 class SwitchManager(ModelDict):

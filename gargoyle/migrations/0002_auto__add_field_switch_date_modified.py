@@ -1,14 +1,13 @@
 # encoding: utf-8
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 try:
     from django.utils.timezone import now as timezone_aware_now
 except ImportError:
     from datetime import datetime
     timezone_aware_now = datetime.now
+
 
 class Migration(SchemaMigration):
 

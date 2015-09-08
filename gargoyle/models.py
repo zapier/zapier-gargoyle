@@ -6,16 +6,17 @@ gargoyle.models
 :license: Apache License 2.0, see LICENSE for more details.
 """
 
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from jsonfield import JSONField
+
 try:
     from django.utils.timezone import now
 except ImportError:
     import datetime
     now = datetime.datetime.now
 
-from jsonfield import JSONField
 
 DISABLED = 1
 SELECTIVE = 2

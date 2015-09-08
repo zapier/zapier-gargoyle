@@ -5,18 +5,17 @@ gargoyle.builtins
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-
-from gargoyle import gargoyle
-from gargoyle.conditions import ModelConditionSet, RequestConditionSet, Percent, String, Boolean, \
-    ConditionSet, OnOrAfterDate
+import socket
+import struct
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.validators import validate_ipv4_address
 
-import socket
-import struct
-
+from gargoyle import gargoyle
+from gargoyle.conditions import (
+    Boolean, ConditionSet, ModelConditionSet, OnOrAfterDate, Percent, RequestConditionSet, String
+)
 
 try:
     from django.contrib.auth import get_user_model
