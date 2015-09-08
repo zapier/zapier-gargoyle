@@ -4,7 +4,6 @@
 """
 import datetime
 import socket
-import sys
 
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User
@@ -15,7 +14,6 @@ from django.http import Http404, HttpRequest, HttpResponse
 from django.template import Context, Template, TemplateSyntaxError
 from django.test import TestCase
 
-import gargoyle
 from gargoyle.builtins import HostConditionSet, IPAddressConditionSet, UserConditionSet
 from gargoyle.decorators import switch_is_active
 from gargoyle.helpers import MockRequest
@@ -1178,21 +1176,3 @@ class CommandRemoveSwitchTestCase(TestCase):
         call_command('remove_switch', 'idontexist')
 
         self.assertFalse('idontexist' in self.gargoyle)
-
-
-class HelpersTestCase(TestCase):
-
-    def setUp(self):
-        self.old_gargoyle_helpers = sys.modules.pop('gargoyle.helpers')
-        del gargoyle.helpers
-
-        self.old_json = sys.modules.pop('json')
-        sys.modules['json'] = None
-
-    def tearDown(self):
-        if self.old_json is not None:
-            sys.modules['json'] = self.old_json
-        else:
-            del sys.modules['json']
-        sys.modules['gargoyle.helpers'] = self.old_gargoyle_helpers
-        gargoyle.helpers = self.old_gargoyle_helpers
