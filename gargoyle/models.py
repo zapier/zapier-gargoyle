@@ -64,6 +64,7 @@ class Switch(models.Model):
     status = models.PositiveSmallIntegerField(default=DISABLED, choices=STATUS_CHOICES)
 
     class Meta:
+        app_label = 'gargoyle'
         permissions = (
             ("can_view", "Can view"),
         )
