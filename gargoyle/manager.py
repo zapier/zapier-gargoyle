@@ -1,8 +1,8 @@
 from django.conf import settings
-from django.core.cache import get_cache
 from django.http import HttpRequest
 from modeldict import ModelDict
 
+from gargoyle.compat import get_cache
 from gargoyle.models import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE, Switch
 from gargoyle.proxy import SwitchProxy
 
