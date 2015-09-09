@@ -1,6 +1,8 @@
 # -*- coding:utf-8 -*-
 import os
 
+import django
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 DEBUG = True
@@ -32,6 +34,8 @@ INSTALLED_APPS = (
     'gargoyle',
     'testapp'
 )
+if django.VERSION[:2] < (1, 7):
+    INSTALLED_APPS += ('south',)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
