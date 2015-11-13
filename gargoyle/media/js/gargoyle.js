@@ -75,6 +75,7 @@ $(document).ready(function () {
 
     $(".switches td.status button").live("click", function () {
         var row = $(this).parents("tr:first");
+        var cell = $(this).parents("td:first");
         var el = $(this);
         var status = el.attr("data-status");
         var labels = {
@@ -98,7 +99,7 @@ $(document).ready(function () {
 
             function (swtch) {
                 if (swtch.status == status) {
-                    row.find(".toggled").removeClass("toggled");
+                    cell.find(".toggled").removeClass("toggled");
                     el.addClass("toggled");
                     row.attr('data-switch-status', swtch.status);
                     if ($.isArray(swtch.conditions) && swtch.conditions.length < 1 && swtch.status == 2) {
@@ -124,11 +125,11 @@ $(document).ready(function () {
     $("div.conditionsForm select").live("change", function () {
         var field = $(this).val().split(",");
         $(this).
-            parents("tr:first").
+            parents("div:first").
             find("div.fields").hide();
 
         $(this).
-            parents("tr:first").
+            parents("div:first").
             find("div[data-path=" + field[0] + "." + field[1] + "]").show();
     });
 
