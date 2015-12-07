@@ -286,9 +286,6 @@ class ConditionSet(object):
                         if exclude:
                             return False
                         return_value = True
-                    else:
-                        if exclude:
-                            return_value = True
         return return_value
 
     def get_group_label(self):
