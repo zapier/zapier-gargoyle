@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 install_requires = [
     'django-modeldict>=1.2.0',
-    'nexus>=0.2.3',
+    'nexus-yplan>=1.0.0',
     'django-jsonfield>=0.9.2,!=0.9.13',
 ]
 
