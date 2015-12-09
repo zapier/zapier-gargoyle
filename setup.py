@@ -10,7 +10,7 @@ install_requires = [
 
 setup(
     name='gargoyle-yplan',
-    version='1.0.0',
+    version='1.0.1',
     author='DISQUS',
     author_email='opensource@disqus.com',
     maintainer='YPlan',
