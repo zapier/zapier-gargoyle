@@ -9,7 +9,7 @@ gargoyle
 from gargoyle.manager import gargoyle
 
 try:
-    VERSION = __import__('pkg_resources').get_distribution('gargoyle').version
+    VERSION = __import__('pkg_resources').get_distribution('gargoyle-yplan').version
 except Exception, e:
     VERSION = 'unknown'
 

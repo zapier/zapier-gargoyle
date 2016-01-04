@@ -6,7 +6,6 @@ flake8==2.4.1
 ipaddress==1.0.14
 isort==3.9.6
 natsort==3.5.5
-https://github.com/yplan/nexus/archive/87b6cd4b4bbcbc4557a4e3f492f3c53ace0be568.tar.gz
 pep8==1.6.2
 pies2overrides==2.6.7
 pies==2.6.7

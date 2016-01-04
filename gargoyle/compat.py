@@ -1,6 +1,10 @@
-try:
-    from django.core.cache import caches
-    get_cache = caches.__getitem__   # noqa
-except ImportError:
-    # Django < 1.7
-    from django.core.cache import get_cache  # noqa
+import django
+
+# Django 1.9
+
+# url(prefix, include(urls, namespace, name)) -> url(prefix, (urls, namespace, name))
+if django.VERSION[:2] >= (1, 9):
+    def subinclude(urls_tuple):
+        return urls_tuple  # (urls, namespace, name)
+else:
+    from django.conf.urls import include as subinclude  # noqa

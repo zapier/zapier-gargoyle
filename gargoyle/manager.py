@@ -1,8 +1,8 @@
 from django.conf import settings
+from django.core.cache import caches
 from django.http import HttpRequest
 from modeldict import ModelDict
 
-from gargoyle.compat import get_cache
 from gargoyle.models import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE, Switch
 from gargoyle.proxy import SwitchProxy
 
@@ -147,7 +147,7 @@ class SwitchManager(ModelDict):
 if hasattr(settings, 'GARGOYLE_CACHE_NAME'):
     gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
                              auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True),
-                             cache=get_cache(settings.GARGOYLE_CACHE_NAME))
+                             cache=caches[settings.GARGOYLE_CACHE_NAME])
 else:
     gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
                              auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True))

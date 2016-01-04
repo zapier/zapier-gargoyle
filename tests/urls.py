@@ -3,23 +3,22 @@
 :license: Apache License 2.0, see LICENSE for more details.
 """
 import nexus
+from django.conf.urls import include, patterns, url
+from django.contrib import admin
 
-try:
-    # Django <1.6
-    from django.conf.urls.defaults import include, patterns, url
-except ImportError:
-    # Django >=1.6
-    from django.conf.urls import include, patterns, url
+from gargoyle.compat import subinclude
 
 
 def foo(request):
     from django.http import HttpResponse
     return HttpResponse()
 
+admin.autodiscover()
 nexus.autodiscover()
 
 urlpatterns = patterns(
     '',
     url(r'^nexus/', include(nexus.site.urls)),
+    url(r'^admin/', subinclude(admin.site.urls)),
     url(r'^$', foo, name='gargoyle_test_foo'),
 )
