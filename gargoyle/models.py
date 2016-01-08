@@ -11,13 +11,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
 
-DISABLED = 1
-SELECTIVE = 2
-GLOBAL = 3
-INHERIT = 4
-
-INCLUDE = 'i'
-EXCLUDE = 'e'
+from .constants import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE
 
 
 class Switch(models.Model):

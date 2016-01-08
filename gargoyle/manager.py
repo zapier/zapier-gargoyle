@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.core.cache import caches
 from django.http import HttpRequest
+from django.utils.functional import SimpleLazyObject
 from modeldict import ModelDict
 
-from gargoyle.models import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE, Switch
 from gargoyle.proxy import SwitchProxy
+
+from .constants import DISABLED, EXCLUDE, GLOBAL, INCLUDE, INHERIT, SELECTIVE
 
 
 class SwitchManager(ModelDict):
@@ -144,10 +146,19 @@ class SwitchManager(ModelDict):
         return MockRequest(user, ip_address)
 
 
-if hasattr(settings, 'GARGOYLE_CACHE_NAME'):
-    gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
-                             auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True),
-                             cache=caches[settings.GARGOYLE_CACHE_NAME])
-else:
-    gargoyle = SwitchManager(Switch, key='key', value='value', instances=True,
-                             auto_create=getattr(settings, 'GARGOYLE_AUTO_CREATE', True))
+def make_gargoyle():
+    from gargoyle.models import Switch
+
+    kwargs = {
+        'key': 'key',
+        'value': 'value',
+        'instances': True,
+        'auto_create': getattr(settings, 'GARGOYLE_AUTO_CREATE', True),
+    }
+
+    if hasattr(settings, 'GARGOYLE_CACHE_NAME'):
+        kwargs['cache'] = caches[settings.GARGOYLE_CACHE_NAME]
+
+    return SwitchManager(Switch, **kwargs)
+
+gargoyle = SimpleLazyObject(make_gargoyle)
