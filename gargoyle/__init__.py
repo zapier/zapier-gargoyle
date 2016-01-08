@@ -5,15 +5,12 @@ gargoyle
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-
 from gargoyle.manager import gargoyle
 
-try:
-    VERSION = __import__('pkg_resources').get_distribution('gargoyle-yplan').version
-except Exception, e:
-    VERSION = 'unknown'
+__version__ = '1.0.1'
+VERSION = __version__  # old version compat
 
-__all__ = ('gargoyle', 'autodiscover', 'VERSION')
+__all__ = ('gargoyle', 'autodiscover', '__version__', 'VERSION')
 
 
 def autodiscover():
