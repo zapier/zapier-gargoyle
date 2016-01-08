@@ -5,7 +5,6 @@ gargoyle.conditions
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-
 # TODO: i18n
 # Credit to Haystack for abstraction concepts
 

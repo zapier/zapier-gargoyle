@@ -9,6 +9,7 @@ import socket
 import struct
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.validators import validate_ipv4_address
 
@@ -17,12 +18,7 @@ from gargoyle.conditions import (
     Boolean, ConditionSet, ModelConditionSet, OnOrAfterDate, Percent, RequestConditionSet, String
 )
 
-try:
-    from django.contrib.auth import get_user_model
-except ImportError:  # django < 1.5
-    from django.contrib.auth.models import User
-else:
-    User = get_user_model()
+User = get_user_model()
 
 
 class UserConditionSet(ModelConditionSet):
