@@ -39,7 +39,7 @@ class SwitchManager(ModelDict):
         Returns ``True`` if any of ``instances`` match an active switch. Otherwise
         returns ``False``.
 
-        >>> gargoyle.is_active('my_feature', request) #doctest: +SKIP
+        >>> gargoyle.is_active('my_feature', request)
         """
         default = kwargs.pop('default', False)
 
@@ -97,8 +97,8 @@ class SwitchManager(ModelDict):
         """
         Registers a condition set with the manager.
 
-        >>> condition_set = MyConditionSet() #doctest: +SKIP
-        >>> gargoyle.register(condition_set) #doctest: +SKIP
+        >>> condition_set = MyConditionSet()
+        >>> gargoyle.register(condition_set)
         """
 
         if callable(condition_set):
@@ -109,7 +109,7 @@ class SwitchManager(ModelDict):
         """
         Unregisters a condition set with the manager.
 
-        >>> gargoyle.unregister(condition_set) #doctest: +SKIP
+        >>> gargoyle.unregister(condition_set)
         """
         if callable(condition_set):
             condition_set = condition_set()
@@ -133,8 +133,8 @@ class SwitchManager(ModelDict):
         """
         Returns a generator which yields groups of lists of conditions.
 
-        >>> for set_id, label, field in gargoyle.get_all_conditions(): #doctest: +SKIP
-        >>>     print "%(label)s: %(field)s" % (label, field.label) #doctest: +SKIP
+        >>> for set_id, label, field in gargoyle.get_all_conditions():
+        >>>     print "%(label)s: %(field)s" % (label, field.label)
         """
         for condition_set in sorted(self.get_condition_sets(), key=lambda x: x.get_group_label()):
             group = six.text_type(condition_set.get_group_label())

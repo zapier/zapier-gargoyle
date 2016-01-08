@@ -120,9 +120,9 @@ class Switch(models.Model):
 
         If ``commit`` is ``False``, the data will not be written to the database.
 
-        >>> switch = gargoyle['my_switch'] #doctest: +SKIP
-        >>> condition_set_id = condition_set.get_id() #doctest: +SKIP
-        >>> switch.add_condition(condition_set_id, 'percent', '0-50', exclude=False) #doctest: +SKIP
+        >>> switch = gargoyle['my_switch']
+        >>> condition_set_id = condition_set.get_id()
+        >>> switch.add_condition(condition_set_id, 'percent', '0-50', exclude=False)
         """
         condition_set = manager.get_condition_set_by_id(condition_set)
 
@@ -146,9 +146,9 @@ class Switch(models.Model):
 
         If ``commit`` is ``False``, the data will not be written to the database.
 
-        >>> switch = gargoyle['my_switch'] #doctest: +SKIP
-        >>> condition_set_id = condition_set.get_id() #doctest: +SKIP
-        >>> switch.remove_condition(condition_set_id, 'percent', [0, 50]) #doctest: +SKIP
+        >>> switch = gargoyle['my_switch']
+        >>> condition_set_id = condition_set.get_id()
+        >>> switch.remove_condition(condition_set_id, 'percent', [0, 50])
         """
         condition_set = manager.get_condition_set_by_id(condition_set)
 
@@ -179,15 +179,15 @@ class Switch(models.Model):
 
         Clear all conditions given a ConditionSet, and a field name:
 
-        >>> switch = gargoyle['my_switch'] #doctest: +SKIP
-        >>> condition_set_id = condition_set.get_id() #doctest: +SKIP
-        >>> switch.clear_conditions(condition_set_id, 'percent') #doctest: +SKIP
+        >>> switch = gargoyle['my_switch']
+        >>> condition_set_id = condition_set.get_id()
+        >>> switch.clear_conditions(condition_set_id, 'percent')
 
         You can also clear all conditions given a ConditionSet:
 
-        >>> switch = gargoyle['my_switch'] #doctest: +SKIP
-        >>> condition_set_id = condition_set.get_id() #doctest: +SKIP
-        >>> switch.clear_conditions(condition_set_id) #doctest: +SKIP
+        >>> switch = gargoyle['my_switch']
+        >>> condition_set_id = condition_set.get_id()
+        >>> switch.clear_conditions(condition_set_id)
         """
         condition_set = manager.get_condition_set_by_id(condition_set)
 
