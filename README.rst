@@ -29,7 +29,13 @@ Install it with ``pip`` (or ``easy_install``):
 
     pip install gargoyle-yplan
 
-Make sure you ``pip uninstall gargoyle`` first if you're upgrading from the original to this fork - the packages clash.
+If you are upgrading from the original to this fork, you will need to run the following first, since the packages clash:
+
+.. code-block:: bash
+
+    pip uninstall django-modeldict gargoyle
+
+Failing to do this will mean that `pip uninstall gargoyle` will also erase the files for `gargoyle-yplan`, and similarly for our `django-modeldict` fork.
 
 Documentation
 -------------
