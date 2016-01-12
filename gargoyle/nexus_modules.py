@@ -11,6 +11,7 @@ from functools import wraps
 
 import nexus
 from django.conf import settings
+from django.conf.urls import patterns, url
 from django.http import HttpResponse, HttpResponseNotFound
 
 from gargoyle import autodiscover, gargoyle, signals
@@ -75,11 +76,6 @@ class GargoyleModule(nexus.NexusModule):
         return 'Gargoyle'
 
     def get_urls(self):
-        try:
-            from django.conf.urls import patterns, url
-        except ImportError:  # Django<=1.4
-            from django.conf.urls.defaults import patterns, url
-
         urlpatterns = patterns(
             '',
             url(r'^add/$', self.as_view(self.add), name='add'),
