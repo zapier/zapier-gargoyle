@@ -18,12 +18,12 @@ class NexusModuleTestCase(TestCase):
     def test_index(self):
         resp = self.client.get('/nexus/gargoyle/')
         assert resp.status_code == 200
-        assert "Gargoyle" in resp.content
+        assert "Gargoyle" in resp.content.decode('utf-8')
 
     def test_add(self):
         resp = self.client.post('/nexus/gargoyle/add/', {'key': 'key1'})
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data']['key'] == 'key1'
         switch = Switch.objects.get()
@@ -33,7 +33,7 @@ class NexusModuleTestCase(TestCase):
         Switch.objects.create(key='key1')
         resp = self.client.post('/nexus/gargoyle/update/', {'curkey': 'key1', 'key': 'key2'})
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data']['key'] == 'key2'
         switch = Switch.objects.get()
@@ -43,7 +43,7 @@ class NexusModuleTestCase(TestCase):
         Switch.objects.create(key='key1', status=DISABLED)
         resp = self.client.post('/nexus/gargoyle/status/', {'key': 'key1', 'status': str(GLOBAL)})
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data']['status'] == GLOBAL
         switch = Switch.objects.get()
@@ -53,7 +53,7 @@ class NexusModuleTestCase(TestCase):
         Switch.objects.create(key='key1')
         resp = self.client.post('/nexus/gargoyle/delete/', {'key': 'key1'})
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data'] == {}
         assert Switch.objects.count() == 0
@@ -71,7 +71,7 @@ class NexusModuleTestCase(TestCase):
              'ip_address': '1.1.1.1'}
         )
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data']['key'] == 'key1'
         assert len(body['data']['conditions']) == 1
@@ -90,7 +90,7 @@ class NexusModuleTestCase(TestCase):
              'value': '1.1.1.1'}
         )
         assert resp.status_code == 200
-        body = json.loads(resp.content)
+        body = json.loads(resp.content.decode('utf-8'))
         assert body['success'] is True
         assert body['data']['key'] == 'key1'
         assert len(body['data']['conditions']) == 0

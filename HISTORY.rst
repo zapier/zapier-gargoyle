@@ -10,6 +10,7 @@ Pending Release
 * Support for Django 1.9
 * Use the YPlan fork of ``django-modeldict``
 * Removed support for Django 1.7
+* Added support for Python 3.4 and 3.5
 
 1.0.1 (2015-12-09)
 ------------------

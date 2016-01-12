@@ -13,6 +13,7 @@ import nexus
 from django.conf import settings
 from django.conf.urls import patterns, url
 from django.http import HttpResponse, HttpResponseNotFound
+from django.utils import six
 
 from gargoyle import autodiscover, gargoyle, signals
 from gargoyle.conditions import ValidationError
@@ -43,7 +44,7 @@ def json(func):
                 "success": True,
                 "data": func(self, request, *args, **kwargs)
             }
-        except GargoyleException, exc:
+        except GargoyleException as exc:
             response = {
                 "success": False,
                 "data": exc.message
@@ -53,10 +54,10 @@ def json(func):
                 "success": False,
                 "data": "Switch cannot be found"
             }
-        except ValidationError, e:
+        except ValidationError as e:
             response = {
                 "success": False,
-                "data": u','.join(map(unicode, e.messages)),
+                "data": u','.join(map(six.text_type, e.messages)),
             }
         except Exception:
             if settings.DEBUG:
@@ -170,7 +171,7 @@ class GargoyleModule(nexus.NexusModule):
         )
 
         changes = {}
-        for attribute, value in values.iteritems():
+        for attribute, value in six.iteritems(values):
             new_value = getattr(switch, attribute)
             if new_value != value:
                 changes[attribute] = (value, new_value)
@@ -185,7 +186,7 @@ class GargoyleModule(nexus.NexusModule):
             switch.save()
 
             logger.info('Switch %r updated %%s' % switch.key,
-                        ', '.join('%s=%r->%r' % (k, v[0], v[1]) for k, v in sorted(changes.iteritems())))
+                        ', '.join('%s=%r->%r' % (k, v[0], v[1]) for k, v in sorted(six.iteritems(changes))))
 
             signals.switch_updated.send(
                 sender=self,

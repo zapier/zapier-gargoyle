@@ -13,6 +13,7 @@ import itertools
 
 from django.core.validators import ValidationError
 from django.http import HttpRequest
+from django.utils import six
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 
@@ -43,7 +44,7 @@ class Field(object):
         value = data.get(self.name)
         if value:
             value = self.clean(value)
-            assert isinstance(value, basestring), 'clean methods must return strings'
+            assert isinstance(value, six.string_types), 'clean methods must return strings'
         return value
 
     def clean(self, value):
@@ -118,7 +119,7 @@ class Percent(Range):
     default_help_text = 'Enter two ranges. e.g. 0-50 is lower 50%'
 
     def is_active(self, condition, value):
-        condition = map(int, condition.split('-'))
+        condition = list(map(int, condition.split('-')))
         mod = value % 100
         return mod >= condition[0] and mod <= condition[1]
 
@@ -155,7 +156,7 @@ class AbstractDate(Field):
     def clean(self, value):
         try:
             date = self.str_to_date(value)
-        except ValueError, e:
+        except ValueError as e:
             raise ValidationError("Date must be a valid date in the format YYYY-MM-DD.\n(%s)" % e.message)
 
         return date.strftime(self.DATE_FORMAT)
@@ -202,7 +203,7 @@ class ConditionSetBase(type):
             if fields:
                 attrs['fields'].update(fields)
 
-        for field_name, obj in attrs.items():
+        for field_name, obj in list(six.iteritems(attrs)):
             if isinstance(obj, Field):
                 field = attrs.pop(field_name)
                 field.set_values(field_name)
@@ -213,8 +214,7 @@ class ConditionSetBase(type):
         return instance
 
 
-class ConditionSet(object):
-    __metaclass__ = ConditionSetBase
+class ConditionSet(six.with_metaclass(ConditionSetBase)):
 
     def __repr__(self):
         return '<%s>' % (self.__class__.__name__,)
@@ -279,7 +279,7 @@ class ConditionSet(object):
         a boolean representing if the feature is active.
         """
         return_value = None
-        for name, field in self.fields.iteritems():
+        for name, field in six.iteritems(self.fields):
             field_conditions = conditions.get(self.get_namespace(), {}).get(name)
             if field_conditions:
                 value = self.get_field_value(instance, name)

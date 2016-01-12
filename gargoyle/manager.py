@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.cache import caches
 from django.http import HttpRequest
+from django.utils import six
 from django.utils.functional import SimpleLazyObject
 from modeldict import ModelDict
 
@@ -82,7 +83,7 @@ class SwitchManager(ModelDict):
         # check each switch to see if it can execute
         return_value = False
 
-        for switch in self._registry.itervalues():
+        for switch in six.itervalues(self._registry):
             result = switch.has_active_condition(conditions, instances)
             if result is False:
                 return False
@@ -126,7 +127,7 @@ class SwitchManager(ModelDict):
         Returns a generator yielding all currently registered
         ConditionSet instances.
         """
-        return self._registry.itervalues()
+        return six.itervalues(self._registry)
 
     def get_all_conditions(self):
         """
@@ -136,8 +137,8 @@ class SwitchManager(ModelDict):
         >>>     print "%(label)s: %(field)s" % (label, field.label) #doctest: +SKIP
         """
         for condition_set in sorted(self.get_condition_sets(), key=lambda x: x.get_group_label()):
-            group = unicode(condition_set.get_group_label())
-            for field in condition_set.fields.itervalues():
+            group = six.text_type(condition_set.get_group_label())
+            for field in six.itervalues(condition_set.fields):
                 yield condition_set.get_id(), group, field
 
     def as_request(self, user=None, ip_address=None):

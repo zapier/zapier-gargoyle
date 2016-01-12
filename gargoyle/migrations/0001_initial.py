@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             name='Switch',
             fields=[
                 ('key', models.CharField(primary_key=True, serialize=False, max_length=64)),
-                ('value', jsonfield.fields.JSONField(default=b'{}')),
+                ('value', jsonfield.fields.JSONField()),
                 ('label', models.CharField(max_length=64, null=True)),
                 ('date_created', models.DateTimeField(default=django.utils.timezone.now)),
                 ('date_modified', models.DateTimeField(auto_now=True)),

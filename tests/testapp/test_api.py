@@ -89,16 +89,16 @@ class APITest(TestCase):
             condition='2011-07-01',
         )
 
-        user = User(pk=8771, date_joined=datetime.datetime(2011, 07, 02))
+        user = User(pk=8771, date_joined=datetime.datetime(2011, 7, 2))
         self.assertTrue(self.gargoyle.is_active('test', user))
 
-        user = User(pk=8771, date_joined=datetime.datetime(2012, 07, 02))
+        user = User(pk=8771, date_joined=datetime.datetime(2012, 7, 2))
         self.assertTrue(self.gargoyle.is_active('test', user))
 
-        user = User(pk=8771, date_joined=datetime.datetime(2011, 06, 02))
+        user = User(pk=8771, date_joined=datetime.datetime(2011, 6, 2))
         self.assertFalse(self.gargoyle.is_active('test', user))
 
-        user = User(pk=8771, date_joined=datetime.datetime(2011, 07, 01))
+        user = User(pk=8771, date_joined=datetime.datetime(2011, 7, 1))
         self.assertTrue(self.gargoyle.is_active('test', user))
 
         switch.clear_conditions(condition_set=condition_set)

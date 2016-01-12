@@ -7,6 +7,7 @@ gargoyle.models
 """
 from django.conf import settings
 from django.db import models
+from django.utils import six
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from jsonfield import JSONField
@@ -43,7 +44,7 @@ class Switch(models.Model):
     }
 
     key = models.CharField(max_length=64, primary_key=True)
-    value = JSONField(default="{}")
+    value = JSONField()
     label = models.CharField(max_length=64, null=True)
     date_created = models.DateTimeField(default=now)
     date_modified = models.DateTimeField(auto_now=True)
@@ -125,7 +126,7 @@ class Switch(models.Model):
         """
         condition_set = manager.get_condition_set_by_id(condition_set)
 
-        assert isinstance(condition, basestring), 'conditions must be strings'
+        assert isinstance(condition, six.string_types), 'conditions must be strings'
 
         namespace = condition_set.get_namespace()
 
@@ -217,7 +218,7 @@ class Switch(models.Model):
             condition_set_id = condition_set.get_id()
             if ns in self.value:
                 group = condition_set.get_group_label()
-                for name, field in condition_set.fields.iteritems():
+                for name, field in six.iteritems(condition_set.fields):
                     for value in self.value[ns].get(name, []):
                         try:
                             yield condition_set_id, group, field, value[1], value[0] == EXCLUDE
