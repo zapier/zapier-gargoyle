@@ -7,6 +7,11 @@ History
 Pending Release
 ---------------
 
+* New release notes here
+
+1.1.0 (2016-01-14)
+------------------
+
 * Support for Django 1.9
 * Use the YPlan fork of ``django-modeldict``
 * Removed support for Django 1.7

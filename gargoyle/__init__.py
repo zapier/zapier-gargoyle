@@ -7,7 +7,7 @@ gargoyle
 """
 from gargoyle.manager import gargoyle
 
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 VERSION = __version__  # old version compat
 
 __all__ = ('gargoyle', 'autodiscover', '__version__', 'VERSION')
