@@ -1,7 +1,0 @@
-docutils
-flake8
-isort
-Pygments
-pytest
-pytest-django
-sqlparse
