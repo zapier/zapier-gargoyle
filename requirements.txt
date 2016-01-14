@@ -1,8 +1,7 @@
 docutils
 flake8
 isort
-py==1.4.31
 Pygments
-pytest-django
 pytest
+pytest-django
 sqlparse
