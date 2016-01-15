@@ -8,6 +8,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.1.1 (2016-01-15)
+------------------
+
 * Fix jQuery Templates
 
 1.1.0 (2016-01-14)
