@@ -8,9 +8,12 @@ Pending Release
 ---------------
 
 * New release notes here
+* Fix jQuery Templates
 
 1.1.0 (2016-01-14)
 ------------------
+
+*This version has a broken UI, please upgrade*
 
 * Support for Django 1.9
 * Use the YPlan fork of ``django-modeldict``
