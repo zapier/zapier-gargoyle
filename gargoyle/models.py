@@ -122,7 +122,7 @@ class Switch(models.Model):
 
         >>> switch = gargoyle['my_switch'] #doctest: +SKIP
         >>> condition_set_id = condition_set.get_id() #doctest: +SKIP
-        >>> switch.add_condition(condition_set_id, 'percent', [0, 50], exclude=False) #doctest: +SKIP
+        >>> switch.add_condition(condition_set_id, 'percent', '0-50', exclude=False) #doctest: +SKIP
         """
         condition_set = manager.get_condition_set_by_id(condition_set)
 
