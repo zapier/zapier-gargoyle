@@ -4,11 +4,13 @@ Usage
 Gargoyle is designed to work around a very simple API. Generally, you pass in the switch key and a list of instances
 to check this key against.
 
-@switch_is_active
-~~~~~~~~~~~~~~~~~
+``@switch_is_active``
+~~~~~~~~~~~~~~~~~~~~~
 
-The simplest way to use Gargoyle is as a decorator. The decorator will automatically integrate with
-filters registered to the ``User`` model, as well as IP address (using RequestConditionSet)::
+The simplest way to use Gargoyle is as a decorator. The decorator will automatically integrate with filters registered
+to the ``User`` model, as well as IP address (using ``RequestConditionSet``):
+
+.. code-block:: python
 
 	from gargoyle.decorators import switch_is_active
 
@@ -17,7 +19,9 @@ filters registered to the ``User`` model, as well as IP address (using RequestCo
 	    return 'foo'
 
 In the case of the switch being inactive and you are using the decorator, a 404 error is raised. You may also redirect
-the user to an absolute URL (relative to domain), or a named URL pattern::
+the user to an absolute URL (relative to domain), or a named URL pattern:
+
+.. code-block:: python
 
 	# if redirect_to starts with a /, we assume it's a url path
 	@switch_is_active('my switch name', redirect_to='/my/url/path')
@@ -25,11 +29,13 @@ the user to an absolute URL (relative to domain), or a named URL pattern::
 	# alternatively use the url mapper
 	@switch_is_active('my switch name', redirect_to='access_denied')
 
-gargoyle.is_active
-~~~~~~~~~~~~~~~~~~
+``gargoyle.is_active``
+~~~~~~~~~~~~~~~~~~~~~~
 
-An alternative, more flexible use of Gargoyle is with the ``is_active`` method. This allows you
-to perform validation on your own custom objects::
+An alternative, more flexible use of Gargoyle is with the ``is_active`` method. This allows you to perform validation
+on your own custom objects:
+
+.. code-block:: python
 
 	from gargoyle import gargoyle
 
@@ -48,10 +54,11 @@ to perform validation on your own custom objects::
 	    else:
 	        return 'bar'
 
-ifswitch
-~~~~~~~~
+``ifswitch``
+~~~~~~~~~~~~
 
-If you prefer to use templatetags, Gargoyle provides a helper called ``ifswitch`` to give you easy conditional blocks based on active switches (for the request)::
+If you prefer to use templatetags, Gargoyle provides a helper called ``ifswitch`` to give you easy conditional blocks
+based on active switches (for the request)::
 
 	{% load gargoyle_tags %}
 
@@ -70,14 +77,17 @@ If you prefer to use templatetags, Gargoyle provides a helper called ``ifswitch`
 Switch Inheritance
 ~~~~~~~~~~~~~~~~~~
 
-Switches utilizing the named pattern of ``parent:child`` will automatically inherit state from their parents. For example,
-if your switch, ``parent:child`` is globally enabled, but ``parent`` is disabled, when ``is_active('parent:child')`` is called
-it will return ``False``.
+Switches utilizing the named pattern of ``parent:child`` will automatically inherit state from their parents. For
+example, if your switch, ``parent:child`` is globally enabled, but ``parent`` is disabled, when
+``is_active('parent:child')`` is called it will return ``False``.
 
-A parent switch that has it's status set to inherit will return the default value for a switch, which is ``False`` (the same as
-disabled).
+A parent switch that has its status set to 'inherit' will return the default value for a switch, which is ``False``
+(the same as disabled).
 
-.. note:: Currently inheritance does not combine filters. If your child defines *any* filters, they will override all of the parents.
+.. note::
+
+    Currently inheritance does not combine filters. If your child defines *any* filters, they will override all of the
+    parents.
 
 Testing Switches
 ~~~~~~~~~~~~~~~~
@@ -85,7 +95,7 @@ Testing Switches
 Gargoyle includes a context manager, which may optionally be used as a decorator, to give temporary state
 to a switch on the currently executing thread.
 
-::
+.. code-block:: python
 
     from gargoyle.testutils import switches
 
