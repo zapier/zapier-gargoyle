@@ -1,3 +1,4 @@
+# -*- encoding:utf-8 -*-
 """
 gargoyle.conditions
 ~~~~~~~~~~~~~~~~~~~
@@ -5,8 +6,7 @@ gargoyle.conditions
 :copyright: (c) 2010 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-# TODO: i18n
-# Credit to Haystack for abstraction concepts
+from __future__ import unicode_literals
 
 import datetime
 import itertools
@@ -84,23 +84,33 @@ class Choice(Field):
 
 
 class Range(Field):
+    # Only Python 3 catches str being incomparable with int, do this whilst we support Python 2
+    integer_comparable_types = six.integer_types + (float,)
+
     def is_active(self, condition, value):
-        if not isinstance(value, six.integer_types):
+        if not isinstance(value, self.integer_comparable_types):
             return False
-        condition = list(map(int, condition.split('-')))
-        return value >= condition[0] and value <= condition[1]
+        bounds = list(map(int, condition.split('-')))
+        return value >= bounds[0] and value <= bounds[1]
 
     def validate(self, data):
         value = filter(None, [data.get(self.name + '[min]'), data.get(self.name + '[max]')]) or None
         return self.clean(value)
 
     def clean(self, value):
-        if value:
-            try:
-                map(int, value)
-            except (TypeError, ValueError):
-                raise ValidationError('You must enter valid integer values.')
-        return '-'.join(value)
+        error = ValidationError("You must enter two valid integer values separated by a dash.")
+        if not value:
+            raise error
+
+        try:
+            bounds = list(map(int, value.split('-')))
+        except (TypeError, ValueError):
+            raise error
+
+        if not len(bounds) == 2:
+            raise error
+
+        return '-'.join(six.text_type(x) for x in bounds)
 
     def render(self, value):
         if not value:
