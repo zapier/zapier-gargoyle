@@ -6,6 +6,6 @@ Gargoyle is a platform built on top of Django which allows you to switch functio
 .. toctree::
    :maxdepth: 2
 
-   install/index
-   usage/index
+   install
+   usage
    ref/index

@@ -23,10 +23,10 @@ the user to an absolute URL (relative to domain), or a named URL pattern:
 
 .. code-block:: python
 
-	# if redirect_to starts with a /, we assume it's a url path
+	# If redirect_to starts with a /, we assume it's a url path
 	@switch_is_active('my switch name', redirect_to='/my/url/path')
 
-	# alternatively use the url mapper
+	# Alternatively use a name that will be passed to reverse()
 	@switch_is_active('my switch name', redirect_to='access_denied')
 
 ``gargoyle.is_active``
@@ -58,7 +58,9 @@ on your own custom objects:
 ~~~~~~~~~~~~
 
 If you prefer to use templatetags, Gargoyle provides a helper called ``ifswitch`` to give you easy conditional blocks
-based on active switches (for the request)::
+based on active switches (for the request):
+
+.. code-block:: django
 
 	{% load gargoyle_tags %}
 
@@ -68,7 +70,9 @@ based on active switches (for the request)::
 	    switch_name is not active :(
 	{% endifswitch %}
 
-``ifswitch`` can also be used with custom objects, like the ``gargoyle.is_active`` method::
+``ifswitch`` can also be used with custom objects, like the ``gargoyle.is_active`` method:
+
+.. code-block:: django
 
 	{% ifswitch "my switch name" user %}
 	    "my switch name" is active!
@@ -100,16 +104,18 @@ to a switch on the currently executing thread.
     from gargoyle.testutils import switches
 
     @switches(my_switch_name=True)
-    def foo():
-        print gargoyle.is_active('my_switch_name')
+    def test_switches_overrides():
+        assert gargoyle.is_active('my_switch_name')  # passes
 
-    def foo():
+    def test_switches_context_manager():
         with switches(my_switch_name=True):
-            print gargoyle.is_active('my_switch_name')
+            assert gargoyle.is_active('my_switch_name')  # passes
 
 You may also optionally pass an instance of ``SwitchManager``
-as the first argument::
+as the first argument:
 
-    def foo():
+.. code-block:: python
+
+    def test_context_manager_alt_gargoyle():
         with switches(gargoyle, my_switch_name=True):
-            print gargoyle.is_active('my_switch_name')
+            assert gargoyle.is_active('my_switch_name')  # passes

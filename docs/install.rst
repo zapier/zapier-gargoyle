@@ -5,7 +5,17 @@ Install using pip:
 
 .. code-block:: sh
 
-	pip install gargoyle
+    pip install gargoyle-yplan
+
+If you are upgrading from the original to this fork, you will need to run the following first, since the packages
+clash:
+
+.. code-block:: bash
+
+    pip uninstall django-modeldict gargoyle
+
+Failing to do this will mean that ``pip uninstall gargoyle`` will also erase the files for `gargoyle-yplan`, and
+similarly for our `django-modeldict` fork.
 
 Enable Gargoyle
 ---------------
@@ -14,28 +24,28 @@ Once you've downloaded the Gargoyle package, you simply need to add it to your `
 
 .. code-block:: python
 
-	INSTALLED_APPS = (
-	    ...
-	    'gargoyle',
-	)
+    INSTALLED_APPS = (
+        ...
+        'gargoyle',
+    )
 
 *If you do not use Nexus*, you will also need to enable discovery of ``gargoyle.py`` modules (which contain
-``ConditionSet``s). The best place to do this is within your ``urls.py`` file:
+``ConditionSet``\s). The best place to do this is within your ``urls.py`` file:
 
 .. code-block:: python
 
-	import gargoyle
+    import gargoyle
 
-	gargoyle.autodiscover()
+    gargoyle.autodiscover()
 
 If you do use ``gargoyle.py`` files, Python 2.7, and the autodiscovery code, you'll need to ensure your imports are not
 relative:
 
 .. code-block:: python
 
-  from __future__ import absolute_import
+    from __future__ import absolute_import
 
-  from gargoyle.conditions import ConditionSet
+    from gargoyle.conditions import ConditionSet
 
 Nexus Frontend
 --------------
@@ -43,14 +53,14 @@ Nexus Frontend
 While Gargoyle can be used without a frontend, we highly recommend using `Nexus
 <https://github.com/YPlan/nexus-yplan>`_.
 
-Nexus will automatically detect Gargoyle's ``NexusModule``, assuming you're using autodiscovery. If not, you will need
-to register the module by hand:
+Nexus will automatically detect Gargoyle's ``NexusModule``, assuming its autodiscovery is on. If not, you will need to
+register the module by hand:
 
 .. code-block:: python
 
-	from gargoyle.nexus_modules import GargoyleModule
+    from gargoyle.nexus_modules import GargoyleModule
 
-	nexus.site.register(GargoyleModule, 'gargoyle')
+    nexus.site.register(GargoyleModule, 'gargoyle')
 
 Disabling Auto Creation
 -----------------------

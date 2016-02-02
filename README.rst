@@ -8,9 +8,11 @@ Gargoyle
 .. image:: https://travis-ci.org/YPlan/gargoyle.svg?branch=master
     :target: https://travis-ci.org/YPlan/gargoyle
 
-Gargoyle is a platform built on top of Django which allows you to switch functionality of your application on and off based on conditions.
+Gargoyle is a platform built on top of Django which allows you to switch functionality of your application on and off
+based on conditions.
 
-It was originally created by `Disqus <https://github.com/disqus/gargoyle>`_, but due to the inactivity we at YPlan have taken over maintenance on this fork.
+It was originally created by `Disqus <https://github.com/disqus/gargoyle>`_, but due to the inactivity we at YPlan have
+taken over maintenance on this fork.
 
 Requirements
 ------------
@@ -35,7 +37,8 @@ If you are upgrading from the original to this fork, you will need to run the fo
 
     pip uninstall django-modeldict gargoyle
 
-Failing to do this will mean that `pip uninstall gargoyle` will also erase the files for `gargoyle-yplan`, and similarly for our `django-modeldict` fork.
+Failing to do this will mean that ``pip uninstall gargoyle`` will also erase the files for `gargoyle-yplan`, and
+similarly for our `django-modeldict` fork.
 
 Documentation
 -------------

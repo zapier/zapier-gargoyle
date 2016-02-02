@@ -18,18 +18,18 @@ class SwitchContextManager(object):
 
     >>> @switches(my_switch_name=True)
     >>> def foo():
-    >>>     print gargoyle.is_active('my_switch_name')
+    >>>     print(gargoyle.is_active('my_switch_name'))
 
     >>> def foo():
     >>>     with switches(my_switch_name=True):
-    >>>         print gargoyle.is_active('my_switch_name')
+    >>>         print(gargoyle.is_active('my_switch_name'))
 
     You may also optionally pass an instance of ``SwitchManager``
     as the first argument.
 
     >>> def foo():
     >>>     with switches(gargoyle, my_switch_name=True):
-    >>>         print gargoyle.is_active('my_switch_name')
+    >>>         print(gargoyle.is_active('my_switch_name'))
     """
     def __init__(self, gargoyle=gargoyle, **keys):
         self.gargoyle = gargoyle
