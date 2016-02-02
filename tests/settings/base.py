@@ -11,7 +11,7 @@ SECRET_KEY = 'NOTASECRET'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '',
+        'NAME': 'dev-database.sqlite3',
     }
 }
 
@@ -24,14 +24,14 @@ CACHES = {
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
+    'testapp',
+    'gargoyle',
+    'nexus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'nexus',
-    'gargoyle',
-    'testapp'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -64,6 +64,8 @@ TEMPLATES = [
         },
     },
 ]
+
+STATIC_URL = '/static/'
 
 GARGOYLE_SWITCH_DEFAULTS = {
     'active_by_default': {

@@ -37,7 +37,7 @@ def main():
 
 
 def tests_main():
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings.test")
     sys.path.insert(0, "tests")
     return pytest.main()
 
