@@ -50,7 +50,7 @@ setup(
         'on and off based on conditions.'
     ),
     long_description=readme + '\n\n' + history,
-    packages=find_packages(exclude=["tests"]),
+    packages=find_packages(exclude=['tests', 'tests.*']),
     zip_safe=False,
     install_requires=[
         'django-modeldict-yplan>=1.5.0',
