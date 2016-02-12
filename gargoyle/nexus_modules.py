@@ -6,7 +6,6 @@ gargoyle.nexus_modules
 :license: Apache License 2.0, see LICENSE for more details.
 """
 import logging
-import os.path
 from functools import wraps
 
 import nexus
@@ -20,8 +19,6 @@ from gargoyle.conditions import ValidationError
 from gargoyle.helpers import dumps
 from gargoyle.models import DISABLED, Switch
 
-GARGOYLE_ROOT = os.path.dirname(__file__)
-
 logger = logging.getLogger('gargoyle.switches')
 
 
@@ -33,9 +30,10 @@ class GargoyleException(Exception):
         return self.message
 
 
-def json(func):
+def json_view(func):
     "Decorator to make JSON views simpler"
 
+    @wraps(func)
     def wrapper(self, request, *args, **kwargs):
         try:
             response = {
@@ -63,7 +61,7 @@ def json(func):
                 traceback.print_exc()
             raise
         return HttpResponse(dumps(response), content_type="application/json")
-    wrapper = wraps(func)(wrapper)
+
     return wrapper
 
 
@@ -112,6 +110,7 @@ class GargoyleModule(nexus.NexusModule):
             "sorted_by": sort_by
         }, request)
 
+    @json_view
     def add(self, request):
         key = request.POST.get("key")
 
@@ -147,8 +146,8 @@ class GargoyleModule(nexus.NexusModule):
         )
 
         return switch.to_dict(gargoyle)
-    add = json(add)
 
+    @json_view
     def update(self, request):
         switch = Switch.objects.get(key=request.POST.get("curkey"))
 
@@ -194,8 +193,8 @@ class GargoyleModule(nexus.NexusModule):
             )
 
         return switch.to_dict(gargoyle)
-    update = json(update)
 
+    @json_view
     def status(self, request):
         switch = Switch.objects.get(key=request.POST.get("key"))
 
@@ -223,8 +222,8 @@ class GargoyleModule(nexus.NexusModule):
             )
 
         return switch.to_dict(gargoyle)
-    status = json(status)
 
+    @json_view
     def delete(self, request):
         switch = Switch.objects.get(key=request.POST.get("key"))
         switch.delete()
@@ -238,8 +237,8 @@ class GargoyleModule(nexus.NexusModule):
         )
 
         return {}
-    delete = json(delete)
 
+    @json_view
     def add_condition(self, request):
         key = request.POST.get("key")
         condition_set_id = request.POST.get("id")
@@ -270,8 +269,8 @@ class GargoyleModule(nexus.NexusModule):
         )
 
         return switch.to_dict(gargoyle)
-    add_condition = json(add_condition)
 
+    @json_view
     def remove_condition(self, request):
         key = request.POST.get("key")
         condition_set_id = request.POST.get("id")
@@ -299,7 +298,6 @@ class GargoyleModule(nexus.NexusModule):
         )
 
         return switch.to_dict(gargoyle)
-    remove_condition = json(remove_condition)
 
     @property
     def valid_sort_orders(self):
