@@ -29,21 +29,6 @@ $(document).ready(function () {
         $.facebox($("#switchForm").tmpl({ add: true }));
     });
 
-    // $(".switches tr").live("click", function (ev) {
-    //     if (ev.target.tagName == 'A' || ev.target.tagName == 'INPUT' || ev.target.tagName == 'LABEL') {
-    //         return;
-    //     }
-    //     var $this = $(this);
-    //     $(".switches tr").each(function (_, el) {
-    //         var $el = $(el);
-    //         if (el == $this.get(0)) {
-    //             $el.removeClass("collapsed");
-    //         } else {
-    //             $el.addClass("collapsed");
-    //         }
-    //     });
-    // });
-
     $(".switches .edit").live("click", function () {
         var row = $(this).parents("tr:first");
 
