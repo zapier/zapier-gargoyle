@@ -1,26 +1,37 @@
 $(document).ready(function () {
-    var api = function (url, params, succ) {
-        $('#status').show();
-        $.ajax({
-            url: url,
-            type: "POST",
-            data: params,
-            dataType: "json",
-            success: function (resp) {
-                $('#status').hide();
 
-                if (resp.success) {
-                    succ(resp.data);
-                } else {
-                    alert(resp.data);
+    var $constants = $('#gargoyle-constants'),
+        urls = {
+            addSwitch: $constants.attr('data-url-add-switch'),
+            updateSwitch: $constants.attr('data-url-update-switch'),
+            deleteSwitch: $constants.attr('data-url-delete-switch'),
+            updateStatus: $constants.attr('data-url-update-status'),
+            addCondition: $constants.attr('data-url-add-condition'),
+            removeCondition: $constants.attr('data-url-remove-condition'),
+            deleteImage: $constants.attr('data-url-delete-image')
+        },
+        api = function (url, params, succ) {
+            $('#status').show();
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: params,
+                dataType: "json",
+                success: function (resp) {
+                    $('#status').hide();
+
+                    if (resp.success) {
+                        succ(resp.data);
+                    } else {
+                        alert(resp.data);
+                    }
+                },
+                failure: function() {
+                    $('#status').hide();
+                    alert('There was an internal error. Data probably wasn\'t saved');
                 }
-            },
-            failure: function() {
-                $('#status').hide();
-                alert('There was an internal error. Data probably wasn\'t saved');
-            }
-        });
-    };
+            });
+        };
 
     // Events
 
@@ -49,7 +60,7 @@ $(document).ready(function () {
             return;
         }
 
-        api(GARGOYLE.deleteSwitch, { key: row.attr("data-switch-key") },
+        api(urls.deleteSwitch, { key: row.attr("data-switch-key") },
             function () {
                 row.remove();
                 if (!table.find("tr").length) {
@@ -75,7 +86,7 @@ $(document).ready(function () {
             }
         }
 
-        api(GARGOYLE.updateStatus,
+        api(urls.updateStatus,
             {
                 key:    row.attr("data-switch-key"),
                 status: status
@@ -137,7 +148,7 @@ $(document).ready(function () {
             data[$(this).attr("name")] = val;
         });
 
-        api(GARGOYLE.addCondition, data, function (swtch) {
+        api(urls.addCondition, data, function (swtch) {
             var result = $("#switchData").tmpl(swtch);
             $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
         });
@@ -155,7 +166,7 @@ $(document).ready(function () {
             value: el.attr("data-value")
         };
 
-        api(GARGOYLE.delCondition, data, function (swtch) {
+        api(urls.removeCondition, data, function (swtch) {
             var result = $("#switchData").tmpl(swtch);
             $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
         });
@@ -171,7 +182,7 @@ $(document).ready(function () {
         var action = $(this).attr("data-action");
         var curkey = $(this).attr("data-curkey");
 
-        api(action == "add" ? GARGOYLE.addSwitch : GARGOYLE.updateSwitch,
+        api(action == "add" ? urls.addSwitch : urls.updateSwitch,
             {
                 curkey: curkey,
                 name:   $("#facebox input[name=name]").val(),

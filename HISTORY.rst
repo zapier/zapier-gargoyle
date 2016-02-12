@@ -13,6 +13,7 @@ Pending Release
 * Fixed the parsing of ``Range`` conditions for the Nexus admin interface.
 * Fixed the Nexus interface to work with Switches that contain dots in their
   names, a merge of disqus/gargoyle#73, thanks @Raekkeri.
+* Removed all inline javascript.
 
 1.1.1 (2016-01-15)
 ------------------
