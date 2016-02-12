@@ -29,20 +29,13 @@ Once you've downloaded the Gargoyle package, you simply need to add it to your `
         'gargoyle',
     )
 
-*If you do not use Nexus*, you will also need to enable discovery of ``gargoyle.py`` modules (which contain
-``ConditionSet``\s). The best place to do this is within your ``urls.py`` file:
+Gargoyle has autodiscovery similar to Django Admin - it will look in each of your ``INSTALLED_APPS`` for a
+``gargoyle`` submodule, and import that. You can use this to declare extra ``ConditionSet``\s. If you use such
+submodules and Python 2.7, you'll need to ensure your imports are not relative in those files:
 
 .. code-block:: python
 
-    import gargoyle
-
-    gargoyle.autodiscover()
-
-If you do use ``gargoyle.py`` files, Python 2.7, and the autodiscovery code, you'll need to ensure your imports are not
-relative:
-
-.. code-block:: python
-
+    # myapp.gargoyle
     from __future__ import absolute_import
 
     from gargoyle.conditions import ConditionSet

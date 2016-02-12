@@ -15,14 +15,12 @@ from django.conf.urls import patterns, url
 from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import six
 
-from gargoyle import autodiscover, gargoyle, signals
+from gargoyle import gargoyle, signals
 from gargoyle.conditions import ValidationError
 from gargoyle.helpers import dumps
 from gargoyle.models import DISABLED, Switch
 
 GARGOYLE_ROOT = os.path.dirname(__file__)
-
-autodiscover()
 
 logger = logging.getLogger('gargoyle.switches')
 
