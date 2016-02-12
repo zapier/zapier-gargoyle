@@ -4,11 +4,11 @@
 """
 import datetime
 
-from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.cache import cache
 from django.http import Http404, HttpRequest, HttpResponse
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from gargoyle.builtins import IPAddressConditionSet, UserConditionSet
 from gargoyle.decorators import switch_is_active
@@ -23,10 +23,6 @@ class APITest(TestCase):
         self.gargoyle = SwitchManager(Switch, key='key', value='value', instances=True, auto_create=True)
         self.gargoyle.register(UserConditionSet(User))
         self.gargoyle.register(IPAddressConditionSet())
-        self.internal_ips = settings.INTERNAL_IPS
-
-    def tearDown(self):
-        settings.INTERNAL_IPS = self.internal_ips
 
     def test_builtin_registration(self):
         self.assertTrue('gargoyle.builtins.UserConditionSet(auth.user)' in self.gargoyle._registry)
@@ -36,11 +32,7 @@ class APITest(TestCase):
     def test_user(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        # we need a better API for this (model dict isnt cutting it)
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -120,10 +112,7 @@ class APITest(TestCase):
     def test_exclusions(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -158,10 +147,7 @@ class APITest(TestCase):
     def test_only_exclusions(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         # Intent is that this condition is True for all users *except* if the
@@ -192,10 +178,7 @@ class APITest(TestCase):
     def test_decorator_for_user(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        switch = Switch.objects.create(key='test', status=DISABLED)
         switch = self.gargoyle['test']
 
         @switch_is_active('test')
@@ -223,10 +206,7 @@ class APITest(TestCase):
     def test_decorator_for_ip_address(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        switch = Switch.objects.create(key='test', status=DISABLED)
         switch = self.gargoyle['test']
 
         @switch_is_active('test')
@@ -299,10 +279,7 @@ class APITest(TestCase):
         self.assertRaises(Http404, test, request)
 
     def test_decorator_with_redirect(self):
-        Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        Switch.objects.create(key='test', status=DISABLED)
 
         request = HttpRequest()
         request.user = self.user
@@ -326,10 +303,7 @@ class APITest(TestCase):
         self.assertTrue(response['Location'], '')
 
     def test_global(self):
-        switch = Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        switch = Switch.objects.create(key='test', status=DISABLED)
         switch = self.gargoyle['test']
 
         self.assertFalse(self.gargoyle.is_active('test'))
@@ -379,11 +353,7 @@ class APITest(TestCase):
         # cache shouldn't have expired
         self.assertFalse(self.gargoyle.is_active('test'))
 
-        # lookup cache_key in a modeldict 1.2/1.4 compatible way
-        if hasattr(self.gargoyle, 'remote_cache_key'):
-            cache_key = self.gargoyle.remote_cache_key
-        else:
-            cache_key = self.gargoyle.cache_key
+        cache_key = self.gargoyle.remote_cache_key
         # in memory cache shouldnt have expired
         cache.delete(cache_key)
         self.assertFalse(self.gargoyle.is_active('test'))
@@ -418,9 +388,7 @@ class APITest(TestCase):
 
         self.assertFalse(self.gargoyle.is_active('test', user))
 
-        switch.clear_conditions(
-            condition_set=condition_set,
-        )
+        switch.clear_conditions(condition_set=condition_set)
 
         self.assertFalse(self.gargoyle.is_active('test', user))
 
@@ -443,10 +411,7 @@ class APITest(TestCase):
     def test_ip_address_internal_ips(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
 
-        Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         request = HttpRequest()
@@ -460,21 +425,15 @@ class APITest(TestCase):
             condition='1',
         )
 
-        settings.INTERNAL_IPS = ['192.168.1.1']
-
-        self.assertTrue(self.gargoyle.is_active('test', request))
-
-        settings.INTERNAL_IPS = []
+        with override_settings(INTERNAL_IPS=['192.168.1.1']):
+            self.assertTrue(self.gargoyle.is_active('test', request))
 
         self.assertFalse(self.gargoyle.is_active('test', request))
 
     def test_ip_address(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         request = HttpRequest()
@@ -490,9 +449,7 @@ class APITest(TestCase):
 
         self.assertTrue(self.gargoyle.is_active('test', request))
 
-        switch.clear_conditions(
-            condition_set=condition_set,
-        )
+        switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
             condition_set=condition_set,
             field_name='ip_address',
@@ -501,9 +458,7 @@ class APITest(TestCase):
 
         self.assertFalse(self.gargoyle.is_active('test', request))
 
-        switch.clear_conditions(
-            condition_set=condition_set,
-        )
+        switch.clear_conditions(condition_set=condition_set)
 
         self.assertFalse(self.gargoyle.is_active('test', request))
 
@@ -518,9 +473,7 @@ class APITest(TestCase):
         # test with mock request
         self.assertTrue(self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='192.168.1.1')))
 
-        switch.clear_conditions(
-            condition_set=condition_set,
-        )
+        switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
             condition_set=condition_set,
             field_name='percent',
@@ -530,9 +483,7 @@ class APITest(TestCase):
 
         self.assertTrue(self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='::1')))
 
-        switch.clear_conditions(
-            condition_set=condition_set,
-        )
+        switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
             condition_set=condition_set,
             field_name='percent',
@@ -670,10 +621,7 @@ class APITest(TestCase):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
         # we need a better API for this (model dict isnt cutting it)
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -682,10 +630,7 @@ class APITest(TestCase):
             condition='0-50',
         )
 
-        switch = Switch.objects.create(
-            key='test:child',
-            status=INHERIT,
-        )
+        switch = Switch.objects.create(key='test:child', status=INHERIT)
         switch = self.gargoyle['test']
 
         user = User(pk=5)
@@ -713,38 +658,23 @@ class APITest(TestCase):
         self.assertTrue(self.gargoyle.is_active('test:child', user))
 
     def test_parent_override_child_state(self):
-        Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        Switch.objects.create(key='test', status=DISABLED)
 
-        Switch.objects.create(
-            key='test:child',
-            status=GLOBAL,
-        )
+        Switch.objects.create(key='test:child', status=GLOBAL)
 
         self.assertFalse(self.gargoyle.is_active('test:child'))
 
     def test_child_state_is_used(self):
-        Switch.objects.create(
-            key='test',
-            status=GLOBAL,
-        )
+        Switch.objects.create(key='test', status=GLOBAL)
 
-        Switch.objects.create(
-            key='test:child',
-            status=DISABLED,
-        )
+        Switch.objects.create(key='test:child', status=DISABLED)
 
         self.assertFalse(self.gargoyle.is_active('test:child'))
 
     def test_parent_override_child_condition(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test', status=SELECTIVE)
 
         parent = self.gargoyle['test']
 
@@ -754,10 +684,7 @@ class APITest(TestCase):
             condition='bob',
         )
 
-        Switch.objects.create(
-            key='test:child',
-            status=GLOBAL,
-        )
+        Switch.objects.create(key='test:child', status=GLOBAL)
 
         user = User(username='bob')
         self.assertTrue(self.gargoyle.is_active('test:child', user))
@@ -770,10 +697,7 @@ class APITest(TestCase):
     def test_child_condition_differing_than_parent_loses(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test', status=SELECTIVE)
 
         parent = self.gargoyle['test']
 
@@ -783,10 +707,7 @@ class APITest(TestCase):
             condition='bob',
         )
 
-        Switch.objects.create(
-            key='test:child',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test:child', status=SELECTIVE)
 
         child = self.gargoyle['test:child']
 
@@ -810,10 +731,7 @@ class APITest(TestCase):
     def test_child_condition_including_parent_wins(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test', status=SELECTIVE)
 
         parent = self.gargoyle['test']
 
@@ -823,10 +741,7 @@ class APITest(TestCase):
             condition='bob',
         )
 
-        Switch.objects.create(
-            key='test:child',
-            status=SELECTIVE,
-        )
+        Switch.objects.create(key='test:child', status=SELECTIVE)
 
         child = self.gargoyle['test:child']
 

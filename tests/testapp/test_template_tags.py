@@ -19,10 +19,7 @@ class BaseTemplateTagTests(TestCase):
 class IfSwitchTests(BaseTemplateTagTests):
 
     def test_simple(self):
-        Switch.objects.create(
-            key='test',
-            status=GLOBAL,
-        )
+        Switch.objects.create(key='test', status=GLOBAL)
 
         template = Template("""
             {% load gargoyle_tags %}
@@ -35,10 +32,7 @@ class IfSwitchTests(BaseTemplateTagTests):
         self.assertTrue('hello world!' in rendered)
 
     def test_else(self):
-        Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        Switch.objects.create(key='test', status=DISABLED)
 
         template = Template("""
             {% load gargoyle_tags %}
@@ -56,10 +50,7 @@ class IfSwitchTests(BaseTemplateTagTests):
     def test_with_request(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -95,10 +86,7 @@ class IfSwitchTests(BaseTemplateTagTests):
     def test_with_custom_objects(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -128,10 +116,7 @@ class IfSwitchTests(BaseTemplateTagTests):
 class IfNotSwitchTests(BaseTemplateTagTests):
 
     def test_simple(self):
-        Switch.objects.create(
-            key='test',
-            status=GLOBAL,
-        )
+        Switch.objects.create(key='test', status=GLOBAL)
 
         template = Template("""
             {% load gargoyle_tags %}
@@ -144,10 +129,7 @@ class IfNotSwitchTests(BaseTemplateTagTests):
         self.assertFalse('hello world!' in rendered)
 
     def test_else(self):
-        Switch.objects.create(
-            key='test',
-            status=DISABLED,
-        )
+        Switch.objects.create(key='test', status=DISABLED)
 
         template = Template("""
             {% load gargoyle_tags %}
@@ -165,10 +147,7 @@ class IfNotSwitchTests(BaseTemplateTagTests):
     def test_with_request(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
@@ -204,10 +183,7 @@ class IfNotSwitchTests(BaseTemplateTagTests):
     def test_with_custom_objects(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
 
-        switch = Switch.objects.create(
-            key='test',
-            status=SELECTIVE,
-        )
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
         switch.add_condition(
