@@ -8,6 +8,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.2.0 (2016-02-12)
+------------------
+
 * Fixed the splitting of ``Range`` conditions, a merge of disqus/gargoyle#55,
   thanks @matclayton.
 * Fixed the parsing of ``Range`` conditions for the Nexus admin interface.
