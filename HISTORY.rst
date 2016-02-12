@@ -16,6 +16,8 @@ Pending Release
 * Removed all inline javascript.
 * Added ``ifnotswitch`` template tag, a merge of disqus/gargoyle#92, thanks
   @mrfuxi.
+* Fixed Nexus admin interface for Switches with spaces in their keys, an issue
+  reported in disqus/gargoyle#98, thanks @arnaudlimbourg.
 
 1.1.1 (2016-01-15)
 ------------------
