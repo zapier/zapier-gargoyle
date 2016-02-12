@@ -94,11 +94,19 @@ class Range(Field):
         return value >= bounds[0] and value <= bounds[1]
 
     def validate(self, data):
-        value = filter(None, [data.get(self.name + '[min]'), data.get(self.name + '[max]')]) or None
+        minimum = data.get(self.name + '[min]', '')
+        maximum = data.get(self.name + '[max]', '')
+
+        if minimum and maximum:
+            value = '-'.join((minimum, maximum))
+        else:
+            value = ''
+
         return self.clean(value)
 
     def clean(self, value):
         error = ValidationError("You must enter two valid integer values separated by a dash.")
+
         if not value:
             raise error
 
@@ -117,8 +125,8 @@ class Range(Field):
             value = ['', '']
         return mark_safe(
             '<input type="text" value="%s" placeholder="from" name="%s[min]"/>'
-            ' - '
-            '<input type="text" placeholder="to" value="%s" name="%s[max]"/>'
+            '%% - '
+            '<input type="text" placeholder="to" value="%s" name="%s[max]"/>%%'
             %
             (escape(value[0]), escape(self.name), escape(value[1]), escape(self.name))
         )
@@ -143,11 +151,14 @@ class Percent(Range):
     def clean(self, value):
         value = super(Percent, self).clean(value)
         if value:
-            numeric = value.split('-')
-            if int(numeric[0]) < 0 or int(numeric[1]) > 100:
+            minimum, maximum = list(map(int, value.split('-')))
+
+            if minimum < 0 or minimum > 100 or maximum < 0 or maximum > 100:
                 raise ValidationError('You must enter values between 0 and 100.')
-            if int(numeric[0]) > int(numeric[1]):
+
+            if minimum > maximum:
                 raise ValidationError('Start value must be less than end value.')
+
         return value
 
 
