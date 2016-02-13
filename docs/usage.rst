@@ -12,22 +12,22 @@ to the ``User`` model, as well as IP address (using ``RequestConditionSet``):
 
 .. code-block:: python
 
-	from gargoyle.decorators import switch_is_active
+    from gargoyle.decorators import switch_is_active
 
-	@switch_is_active('my switch name')
-	def my_view(request):
-	    return 'foo'
+    @switch_is_active('my switch name')
+    def my_view(request):
+        return 'foo'
 
 In the case of the switch being inactive and you are using the decorator, a 404 error is raised. You may also redirect
 the user to an absolute URL (relative to domain), or a named URL pattern:
 
 .. code-block:: python
 
-	# If redirect_to starts with a /, we assume it's a url path
-	@switch_is_active('my switch name', redirect_to='/my/url/path')
+    # If redirect_to starts with a /, we assume it's a url path
+    @switch_is_active('my switch name', redirect_to='/my/url/path')
 
-	# Alternatively use a name that will be passed to reverse()
-	@switch_is_active('my switch name', redirect_to='access_denied')
+    # Alternatively use a name that will be passed to reverse()
+    @switch_is_active('my switch name', redirect_to='access_denied')
 
 ``gargoyle.is_active``
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -37,25 +37,25 @@ on your own custom objects:
 
 .. code-block:: python
 
-	from gargoyle import gargoyle
+    from gargoyle import gargoyle
 
-	def my_function(request):
-	    if gargoyle.is_active('my switch name', request):
-	        return 'foo'
-	    else:
-	        return 'bar'
+    def my_function(request):
+        if gargoyle.is_active('my switch name', request):
+            return 'foo'
+        else:
+            return 'bar'
 
-	# with custom objects
-	from gargoyle import gargoyle
+    # with custom objects
+    from gargoyle import gargoyle
 
-	def my_method(user):
-	    if gargoyle.is_active('my switch name', user):
-	        return 'foo'
-	    else:
-	        return 'bar'
+    def my_method(user):
+        if gargoyle.is_active('my switch name', user):
+            return 'foo'
+        else:
+            return 'bar'
 
-``ifswitch``
-~~~~~~~~~~~~
+Template Tags
+~~~~~~~~~~~~~
 
 If you prefer to use templatetags, Gargoyle provides two helpers called ``ifswitch`` and ``ifnotswitch`` to give you
 easy conditional blocks based on active switches (for the request):
@@ -82,9 +82,9 @@ The ``else`` clauses are optional.
 
 .. code-block:: django
 
-	{% ifswitch "my switch name" user %}
-	    "my switch name" is active!
-	{% endifswitch %}
+    {% ifswitch "my switch name" user %}
+        "my switch name" is active!
+    {% endifswitch %}
 
 Switch Inheritance
 ~~~~~~~~~~~~~~~~~~
@@ -104,8 +104,8 @@ A parent switch that has its status set to 'inherit' will return the default val
 Testing Switches
 ~~~~~~~~~~~~~~~~
 
-Gargoyle includes a context manager, which may optionally be used as a decorator, to give temporary state
-to a switch on the currently executing thread.
+Gargoyle includes a context manager, which may optionally be used as a decorator, to give temporary state to a switch
+on the currently executing thread.
 
 .. code-block:: python
 
@@ -119,8 +119,7 @@ to a switch on the currently executing thread.
         with switches(my_switch_name=True):
             assert gargoyle.is_active('my_switch_name')  # passes
 
-You may also optionally pass an instance of ``SwitchManager``
-as the first argument:
+You may also optionally pass an instance of ``SwitchManager`` as the first argument:
 
 .. code-block:: python
 
