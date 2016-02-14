@@ -2,13 +2,13 @@ $(document).ready(function () {
 
     var $constants = $('#gargoyle-constants'),
         urls = {
-            addSwitch: $constants.attr('data-url-add-switch'),
-            updateSwitch: $constants.attr('data-url-update-switch'),
-            deleteSwitch: $constants.attr('data-url-delete-switch'),
-            updateStatus: $constants.attr('data-url-update-status'),
-            addCondition: $constants.attr('data-url-add-condition'),
-            removeCondition: $constants.attr('data-url-remove-condition'),
-            deleteImage: $constants.attr('data-url-delete-image')
+            addSwitch: $constants.data('urlAddSwitch'),
+            updateSwitch: $constants.data('urlUpdateSwitch'),
+            deleteSwitch: $constants.data('urlDeleteSwitch'),
+            updateStatus: $constants.data('urlUpdateStatus'),
+            addCondition: $constants.data('urlAddCondition'),
+            removeCondition: $constants.data('urlRemoveCondition'),
+            deleteImage: $constants.data('urlDeleteImage')
         },
         api = function (url, params, succ) {
             $('#status').show();
@@ -45,10 +45,10 @@ $(document).ready(function () {
 
         $.facebox($("#switchForm").tmpl({
             add:    false,
-            curkey: row.attr("data-switch-key"),
-            key:    row.attr("data-switch-key"),
-            name:   row.attr("data-switch-name"),
-            desc:   row.attr("data-switch-desc")
+            curkey: row.data("switchKey"),
+            key:    row.data("switchKey"),
+            name:   row.data("switchName"),
+            desc:   row.data("switchDesc")
         }));
     });
 
@@ -60,7 +60,7 @@ $(document).ready(function () {
             return;
         }
 
-        api(urls.deleteSwitch, { key: row.attr("data-switch-key") },
+        api(urls.deleteSwitch, { key: row.data("switchKey") },
             function () {
                 row.remove();
                 if (!table.find("tr").length) {
@@ -72,7 +72,7 @@ $(document).ready(function () {
     $(".switches td.status button").live("click", function () {
         var row = $(this).parents("tr:first");
         var el = $(this);
-        var status = el.attr("data-status");
+        var status = el.data("status");
         var labels = {
             4: "(Inherit from parent)",
             3: "(Active for everyone)",
@@ -88,7 +88,7 @@ $(document).ready(function () {
 
         api(urls.updateStatus,
             {
-                key:    row.attr("data-switch-key"),
+                key:    row.data('switchKey'),
                 status: status
             },
 
@@ -96,7 +96,7 @@ $(document).ready(function () {
                 if (swtch.status == status) {
                     row.find(".toggled").removeClass("toggled");
                     el.addClass("toggled");
-                    row.attr('data-switch-status', swtch.status);
+                    row.data('switchStatus', swtch.status);
                     if ($.isArray(swtch.conditions) && swtch.conditions.length < 1 && swtch.status == 2) {
                         swtch.status = 3;
                     }
@@ -132,9 +132,9 @@ $(document).ready(function () {
         ev.preventDefault();
 
         var data = {
-            key: $(this).parents("tr:first").attr("data-switch-key"),
-            id: $(this).attr("data-switch"),
-            field: $(this).attr("data-field")
+            key: $(this).parents("tr:first").data('switchKey'),
+            id: $(this).data('switch'),
+            field: $(this).data('field')
         };
 
         $.each($(this).find("input"), function () {
@@ -160,10 +160,10 @@ $(document).ready(function () {
         var el = $(this).parents("span:first");
 
         var data = {
-            key:   el.parents("tr:first").attr("data-switch-key"),
-            id:    el.attr("data-switch"),
-            field: el.attr("data-field"),
-            value: el.attr("data-value")
+            key:   el.parents("tr:first").data('switchKey'),
+            id:    el.data('switch'),
+            field: el.data('field'),
+            value: el.data('value')
         };
 
         api(urls.removeCondition, data, function (swtch) {
@@ -179,8 +179,8 @@ $(document).ready(function () {
     });
 
     $("#facebox .submitSwitch").live("click", function () {
-        var action = $(this).attr("data-action");
-        var curkey = $(this).attr("data-curkey");
+        var action = $(this).data('action');
+        var curkey = $(this).data('curkey');
 
         api(action == "add" ? urls.addSwitch : urls.updateSwitch,
             {
@@ -221,10 +221,10 @@ $(document).ready(function () {
         $('.switches tr').each(function (_, el) {
             var $el = $(el);
             var score = 0;
-            score += $el.attr('data-switch-key').score(query);
-            score += $el.attr('data-switch-name').score(query);
-            if ($el.attr('data-switch-description')) {
-                score += $el.attr('data-switch-description').score(query);
+            score += $el.data('switchKey').score(query);
+            score += $el.data('switchName').score(query);
+            if ($el.data('switchDescription')) {
+                score += $el.data('switchDescription').score(query);
             }
             if (score === 0) {
                 $el.addClass('hidden');
