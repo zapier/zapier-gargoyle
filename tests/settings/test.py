@@ -9,3 +9,7 @@ DEBUG = False
 
 DATABASES = deepcopy(DATABASES)
 del DATABASES['default']['NAME']
+
+
+TEMPLATES = deepcopy(TEMPLATES)
+TEMPLATES[0]['OPTIONS']['debug'] = False

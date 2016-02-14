@@ -10,7 +10,7 @@ from functools import wraps
 
 import nexus
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.http import HttpResponse, HttpResponseNotFound
 from django.utils import six
 
@@ -73,8 +73,7 @@ class GargoyleModule(nexus.NexusModule):
         return 'Gargoyle'
 
     def get_urls(self):
-        urlpatterns = patterns(
-            '',
+        return [
             url(r'^add/$', self.as_view(self.add), name='add'),
             url(r'^update/$', self.as_view(self.update), name='update'),
             url(r'^delete/$', self.as_view(self.delete), name='delete'),
@@ -82,9 +81,7 @@ class GargoyleModule(nexus.NexusModule):
             url(r'^conditions/add/$', self.as_view(self.add_condition), name='add-condition'),
             url(r'^conditions/remove/$', self.as_view(self.remove_condition), name='remove-condition'),
             url(r'^$', self.as_view(self.index), name='index'),
-        )
-
-        return urlpatterns
+        ]
 
     def render_on_dashboard(self, request):
         active_switches_count = Switch.objects.exclude(status=DISABLED).count()

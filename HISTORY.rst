@@ -11,6 +11,7 @@ Pending Release
 * Simplified autodiscovery code to use ``AppConfig.ready()``. It's no longer
   necessary to add a call to ``gargoyle.autodiscover()`` in your ``urls.py``,
   when not using Nexus.
+* Fixed url `patterns` warnings that appear on Django 1.9
 
 1.2.0 (2016-02-12)
 ------------------
