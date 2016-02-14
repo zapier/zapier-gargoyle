@@ -23,4 +23,5 @@ def autodiscover():
     not present. This forces an import on them to register any gargoyle bits they
     may want.
     """
+    import gargoyle.builtins  # noqa
     autodiscover_modules('gargoyle')
