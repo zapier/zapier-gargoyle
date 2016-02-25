@@ -8,6 +8,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.2.1 (2016-02-25)
+------------------
+
 * Simplified autodiscovery code to use ``AppConfig.ready()``. It's no longer
   necessary to add a call to ``gargoyle.autodiscover()`` in your ``urls.py``,
   when not using Nexus.
