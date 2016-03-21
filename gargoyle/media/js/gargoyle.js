@@ -32,24 +32,31 @@ $(document).ready(function () {
                 }
             });
         };
+        switchFormTemplate = $.templates('#switchForm'),
+        switchDataTemplate = $.templates('#switchData'),
+        switchConditionsTemplate = $.templates('#switchConditions');
+
+    $.views.settings.allowCode(true);
 
     // Events
 
     $(".addSwitch").click(function (ev) {
         ev.preventDefault();
-        $.facebox($("#switchForm").tmpl({ add: true }));
+        var content = switchFormTemplate.render({ add: true });
+        $.facebox(content);
     });
 
     $(".switches .edit").live("click", function () {
-        var row = $(this).parents("tr:first");
+        var row = $(this).parents("tr:first"),
+            content = switchFormTemplate.render({
+                add:    false,
+                curkey: row.data("switchKey"),
+                key:    row.data("switchKey"),
+                name:   row.data("switchName"),
+                desc:   row.data("switchDesc")
+            });
 
-        $.facebox($("#switchForm").tmpl({
-            add:    false,
-            curkey: row.data("switchKey"),
-            key:    row.data("switchKey"),
-            name:   row.data("switchName"),
-            desc:   row.data("switchDesc")
-        }));
+        $.facebox(content);
     });
 
     $(".switches .delete").live("click", function () {
@@ -107,10 +114,12 @@ $(document).ready(function () {
 
     $("p.addCondition a").live("click", function (ev) {
         ev.preventDefault();
-        var form = $(this).parents("td:first").find("div.conditionsForm:first");
+        var form = $(this).parents("td:first").find("div.conditionsForm:first"),
+            content;
 
         if (form.is(":hidden")) {
-            form.html($("#switchConditions").tmpl({}));
+            content = switchConditionsTemplate.render({});
+            form.html(content);
             form.addClass('visible');
         } else {
             form.removeClass('visible');
@@ -149,26 +158,25 @@ $(document).ready(function () {
         });
 
         api(urls.addCondition, data, function (swtch) {
-            var result = $("#switchData").tmpl(swtch);
-            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
+            var content = switchDataTemplate.render(swtch);
+            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(content);
         });
     });
 
     $("div.conditions span.value a.delete-condition").live("click", function (ev) {
         ev.preventDefault();
 
-        var el = $(this).parents("span:first");
-
-        var data = {
-            key:   el.parents("tr:first").data('switchKey'),
-            id:    el.data('switch'),
-            field: el.data('field'),
-            value: el.data('value')
-        };
+        var el = $(this).parents("span:first"),
+            data = {
+                key:   el.parents("tr:first").data('switchKey'),
+                id:    el.data('switch'),
+                field: el.data('field'),
+                value: el.data('value')
+            };
 
         api(urls.removeCondition, data, function (swtch) {
-            var result = $("#switchData").tmpl(swtch);
-            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(result);
+            var content = switchDataTemplate.render(swtch);
+            $("table.switches tr[data-switch-key='"+ data.key + "']").replaceWith(content);
         });
 
     });
@@ -179,8 +187,8 @@ $(document).ready(function () {
     });
 
     $("#facebox .submitSwitch").live("click", function () {
-        var action = $(this).data('action');
-        var curkey = $(this).data('curkey');
+        var action = $(this).data('action'),
+            curkey = $(this).data('curkey');
 
         api(action == "add" ? urls.addSwitch : urls.updateSwitch,
             {
@@ -191,23 +199,23 @@ $(document).ready(function () {
             },
 
             function (swtch) {
-                var result = $("#switchData").tmpl(swtch);
+                var content = $(switchDataTemplate.render(swtch));
 
                 if (action == "add") {
                     if ($("table.switches tr").length === 0) {
-                        $("table.switches").html(result);
+                        $("table.switches").html(content);
                         $("table.switches").removeClass("empty");
                         $("div.noSwitches").hide();
                     } else {
-                        $("table.switches tr:last").after(result);
+                        $("table.switches tr:last").after(content);
                     }
 
                     $.facebox.close();
                 } else {
-                    $("table.switches tr[data-switch-key='" + curkey + "']").replaceWith(result);
+                    $("table.switches tr[data-switch-key='" + curkey + "']").replaceWith(content);
                     $.facebox.close();
                 }
-                result.click();
+                content.click();
             }
         );
     });
