@@ -8,6 +8,8 @@ Pending Release
 ---------------
 
 * New release notes here
+* Removed the South Migrations, since South doesn't support Django 1.7+, and
+  Gargoyle only supports Django 1.8+.
 
 1.2.1 (2016-02-25)
 ------------------
