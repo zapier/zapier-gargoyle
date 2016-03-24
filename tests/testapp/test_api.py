@@ -9,7 +9,7 @@ import datetime
 import pytest
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.cache import cache
-from django.http import Http404, HttpRequest, HttpResponse
+from django.http import Http404, HttpResponse
 from django.test import TestCase
 from django.test.utils import override_settings
 
@@ -17,9 +17,12 @@ from gargoyle.builtins import IPAddressConditionSet, UserConditionSet
 from gargoyle.decorators import switch_is_active
 from gargoyle.manager import SwitchManager
 from gargoyle.models import DISABLED, GLOBAL, INHERIT, SELECTIVE, Switch
+from testapp.utils import RequestFactory
 
 
 class APITest(TestCase):
+
+    request_factory = RequestFactory()
 
     def setUp(self):
         self.user = User.objects.create(username='foo', email='foo@example.com')
@@ -71,8 +74,9 @@ class APITest(TestCase):
         user = User(pk=8771, is_superuser=True)
         assert self.gargoyle.is_active('test', user)
 
-        # test with mock request
-        assert self.gargoyle.is_active('test', self.gargoyle.as_request(user=user))
+        # test with request
+        request = self.request_factory.get('/', user=user)
+        assert self.gargoyle.is_active('test', request)
 
         # test date joined condition
         user = User(pk=8771)
@@ -188,8 +192,7 @@ class APITest(TestCase):
         def test(request):
             return True
 
-        request = HttpRequest()
-        request.user = self.user
+        request = self.request_factory.get('/', user=self.user)
 
         with pytest.raises(Http404):
             test(request)
@@ -218,8 +221,7 @@ class APITest(TestCase):
         def test(request):
             return True
 
-        request = HttpRequest()
-        request.META['REMOTE_ADDR'] = '192.168.1.1'
+        request = self.request_factory.get('/', REMOTE_ADDR='192.168.1.1')
 
         with pytest.raises(Http404):
             test(request)
@@ -289,8 +291,7 @@ class APITest(TestCase):
     def test_decorator_with_redirect(self):
         Switch.objects.create(key='test', status=DISABLED)
 
-        request = HttpRequest()
-        request.user = self.user
+        request = self.request_factory.get('/', user=self.user)
 
         @switch_is_active('test', redirect_to='/foo')
         def test(request):
@@ -422,8 +423,7 @@ class APITest(TestCase):
         Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
-        request = HttpRequest()
-        request.META['REMOTE_ADDR'] = '192.168.1.1'
+        request = self.request_factory.get('/', REMOTE_ADDR='192.168.1.1')
 
         assert not self.gargoyle.is_active('test', request)
 
@@ -444,8 +444,7 @@ class APITest(TestCase):
         switch = Switch.objects.create(key='test', status=SELECTIVE)
         switch = self.gargoyle['test']
 
-        request = HttpRequest()
-        request.META['REMOTE_ADDR'] = '192.168.1.1'
+        request = self.request_factory.get('/', REMOTE_ADDR='192.168.1.1')
 
         assert not self.gargoyle.is_active('test', request)
 
@@ -478,8 +477,7 @@ class APITest(TestCase):
 
         assert self.gargoyle.is_active('test', request)
 
-        # test with mock request
-        assert self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='192.168.1.1'))
+        assert self.gargoyle.is_active('test', self.request_factory.get('/', REMOTE_ADDR='192.168.1.1'))
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
@@ -489,7 +487,7 @@ class APITest(TestCase):
         )
         assert not self.gargoyle.is_active('test', request)
 
-        assert self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='::1'))
+        assert self.gargoyle.is_active('test', self.request_factory.get('/', REMOTE_ADDR='::1'))
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(

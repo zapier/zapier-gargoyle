@@ -143,11 +143,6 @@ class SwitchManager(ModelDict):
             for field in six.itervalues(condition_set.fields):
                 yield condition_set.get_id(), group, field
 
-    def as_request(self, user=None, ip_address=None):
-        from gargoyle.helpers import MockRequest
-
-        return MockRequest(user, ip_address)
-
 
 def make_gargoyle():
     from gargoyle.models import Switch

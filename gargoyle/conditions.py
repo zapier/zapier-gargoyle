@@ -38,6 +38,8 @@ class Field(object):
             self.label = titlize(name)
 
     def is_active(self, condition, value):
+        print(condition, value)
+        print(condition == value)
         return condition == value
 
     def validate(self, data):
@@ -357,4 +359,5 @@ class RequestConditionSet(ConditionSet):
         return 'request'
 
     def can_execute(self, instance):
+        print(instance, isinstance(instance, HttpRequest))
         return isinstance(instance, HttpRequest)
