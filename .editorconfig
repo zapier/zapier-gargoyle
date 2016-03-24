@@ -12,9 +12,6 @@ end_of_line = lf
 
 [*.py]
 line_length=120
-multi_line_output=5
-known_third_party=django,nexus,south
-known_first_party=gargoyle,testapp
 
 [Makefile]
 indent_style = tab

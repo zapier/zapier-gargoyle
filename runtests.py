@@ -46,7 +46,7 @@ def run_flake8():
     print('Running flake8 code linting')
     ret = subprocess.call([
         'flake8',
-        '--exclude=.svn,CVS,.bzr,.hg,.git,__pycache__,.tox,south_migrations',
+        '--exclude=.svn,CVS,.bzr,.hg,.git,__pycache__,.tox',
         'gargoyle', 'tests'
     ])
     print('flake8 failed' if ret else 'flake8 passed')
