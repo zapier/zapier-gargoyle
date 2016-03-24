@@ -14,24 +14,24 @@ class MockRequestTest(TestCase):
 
     def test_empty_attrs(self):
         req = MockRequest()
-        self.assertEquals(req.META['REMOTE_ADDR'], None)
-        self.assertEquals(req.user.__class__, AnonymousUser)
+        assert req.META['REMOTE_ADDR'] is None
+        assert isinstance(req.user, AnonymousUser)
 
     def test_ip(self):
         req = MockRequest(ip_address='127.0.0.1')
-        self.assertEquals(req.META['REMOTE_ADDR'], '127.0.0.1')
-        self.assertEquals(req.user.__class__, AnonymousUser)
+        assert req.META['REMOTE_ADDR'] == '127.0.0.1'
+        assert isinstance(req.user, AnonymousUser)
 
     def test_user(self):
         user = User.objects.create(username='foo', email='foo@example.com')
         req = MockRequest(user=user)
-        self.assertEquals(req.META['REMOTE_ADDR'], None)
-        self.assertEquals(req.user, user)
+        assert req.META['REMOTE_ADDR'] is None
+        assert req.user == user
 
     def test_as_request(self):
         user = User.objects.create(username='foo', email='foo@example.com')
 
         req = self.gargoyle.as_request(user=user, ip_address='127.0.0.1')
 
-        self.assertEquals(req.META['REMOTE_ADDR'], '127.0.0.1')
-        self.assertEquals(req.user, user)
+        assert req.META['REMOTE_ADDR'] == '127.0.0.1'
+        assert req.user == user

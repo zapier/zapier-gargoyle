@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import pytest
 from django.contrib.auth.models import User
 from django.http import HttpRequest
 from django.template import Context, Template, TemplateSyntaxError
@@ -31,7 +32,7 @@ class IfSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context())
 
-        self.assertTrue('hello world!' in rendered)
+        assert 'hello world!' in rendered
 
     def test_else(self):
         Switch.objects.create(key='test', status=DISABLED)
@@ -46,8 +47,8 @@ class IfSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context())
 
-        self.assertTrue('foo bar baz' in rendered)
-        self.assertFalse('hello world!' in rendered)
+        assert 'foo bar baz' in rendered
+        assert 'hello world!' not in rendered
 
     def test_with_request(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -74,16 +75,17 @@ class IfSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context({'request': request}))
 
-        self.assertFalse('foo bar baz' in rendered)
-        self.assertTrue('hello world!' in rendered)
+        assert 'foo bar baz' not in rendered
+        assert 'hello world!' in rendered
 
     def test_missing_name(self):
-        self.assertRaises(TemplateSyntaxError, Template, """
-            {% load gargoyle_tags %}
-            {% ifswitch %}
-            hello world!
-            {% endifswitch %}
-        """)
+        with pytest.raises(TemplateSyntaxError):
+            Template("""
+                {% load gargoyle_tags %}
+                {% ifswitch %}
+                hello world!
+                {% endifswitch %}
+            """)
 
     def test_with_custom_objects(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -111,8 +113,8 @@ class IfSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context({'request': request}))
 
-        self.assertFalse('foo bar baz' in rendered)
-        self.assertTrue('hello world!' in rendered)
+        assert 'foo bar baz' not in rendered
+        assert 'hello world!' in rendered
 
 
 class IfNotSwitchTests(BaseTemplateTagTests):
@@ -128,7 +130,7 @@ class IfNotSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context())
 
-        self.assertFalse('hello world!' in rendered)
+        assert 'hello world!' not in rendered
 
     def test_else(self):
         Switch.objects.create(key='test', status=DISABLED)
@@ -143,8 +145,8 @@ class IfNotSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context())
 
-        self.assertFalse('foo bar baz' in rendered)
-        self.assertTrue('hello world!' in rendered)
+        assert 'foo bar baz' not in rendered
+        assert 'hello world!' in rendered
 
     def test_with_request(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -171,16 +173,17 @@ class IfNotSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context({'request': request}))
 
-        self.assertTrue('foo bar baz' in rendered)
-        self.assertFalse('hello world!' in rendered)
+        assert 'foo bar baz' in rendered
+        assert 'hello world!' not in rendered
 
     def test_missing_name(self):
-        self.assertRaises(TemplateSyntaxError, Template, """
-            {% load gargoyle_tags %}
-            {% ifnotswitch %}
-            hello world!
-            {% endifnotswitch %}
-        """)
+        with pytest.raises(TemplateSyntaxError):
+            Template("""
+                {% load gargoyle_tags %}
+                {% ifnotswitch %}
+                hello world!
+                {% endifnotswitch %}
+            """)
 
     def test_with_custom_objects(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -208,5 +211,5 @@ class IfNotSwitchTests(BaseTemplateTagTests):
         """)
         rendered = template.render(Context({'request': request}))
 
-        self.assertTrue('foo bar baz' in rendered)
-        self.assertFalse('hello world!' in rendered)
+        assert 'foo bar baz' in rendered
+        assert 'hello world!' not in rendered

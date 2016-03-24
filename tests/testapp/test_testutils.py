@@ -19,8 +19,8 @@ class SwitchContextManagerTest(TestCase):
         def test():
             return self.gargoyle.is_active('test')
 
-        self.assertTrue(test())
-        self.assertEquals(self.gargoyle['test'].status, DISABLED)
+        assert test()
+        assert self.gargoyle['test'].status == DISABLED
 
         switch.status = GLOBAL
         switch.save()
@@ -29,22 +29,22 @@ class SwitchContextManagerTest(TestCase):
         def test2():
             return self.gargoyle.is_active('test')
 
-        self.assertFalse(test2())
-        self.assertEquals(self.gargoyle['test'].status, GLOBAL)
+        assert not test2()
+        assert self.gargoyle['test'].status == GLOBAL
 
     def test_context_manager(self):
         switch = self.gargoyle['test']
         switch.status = DISABLED
 
         with switches(self.gargoyle, test=True):
-            self.assertTrue(self.gargoyle.is_active('test'))
+            assert self.gargoyle.is_active('test')
 
-        self.assertEquals(self.gargoyle['test'].status, DISABLED)
+        assert self.gargoyle['test'].status == DISABLED
 
         switch.status = GLOBAL
         switch.save()
 
         with switches(self.gargoyle, test=False):
-            self.assertFalse(self.gargoyle.is_active('test'))
+            assert not self.gargoyle.is_active('test')
 
-        self.assertEquals(self.gargoyle['test'].status, GLOBAL)
+        assert self.gargoyle['test'].status == GLOBAL

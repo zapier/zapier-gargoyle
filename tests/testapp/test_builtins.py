@@ -102,7 +102,7 @@ class HostConditionSetTest(TestCase):
         )
         switch = self.gargoyle['test']
 
-        self.assertFalse(self.gargoyle.is_active('test'))
+        assert not self.gargoyle.is_active('test')
 
         switch.add_condition(
             condition_set=condition_set,
@@ -110,4 +110,4 @@ class HostConditionSetTest(TestCase):
             condition=socket.gethostname(),
         )
 
-        self.assertTrue(self.gargoyle.is_active('test'))
+        assert self.gargoyle.is_active('test')

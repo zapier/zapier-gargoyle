@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import datetime
 
+import pytest
 from django.contrib.auth.models import AnonymousUser, User
 from django.core.cache import cache
 from django.http import Http404, HttpRequest, HttpResponse
@@ -27,9 +28,9 @@ class APITest(TestCase):
         self.gargoyle.register(IPAddressConditionSet())
 
     def test_builtin_registration(self):
-        self.assertTrue('gargoyle.builtins.UserConditionSet(auth.user)' in self.gargoyle._registry)
-        self.assertTrue('gargoyle.builtins.IPAddressConditionSet' in self.gargoyle._registry)
-        self.assertEquals(len(list(self.gargoyle.get_condition_sets())), 2, self.gargoyle)
+        assert 'gargoyle.builtins.UserConditionSet(auth.user)' in self.gargoyle._registry
+        assert 'gargoyle.builtins.IPAddressConditionSet' in self.gargoyle._registry
+        assert len(list(self.gargoyle.get_condition_sets())) == 2
 
     def test_user(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -44,10 +45,10 @@ class APITest(TestCase):
         )
 
         user = User(pk=5)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=8771)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -56,10 +57,10 @@ class APITest(TestCase):
         )
 
         user = User(pk=8771, is_staff=True)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=8771, is_superuser=True)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -68,14 +69,14 @@ class APITest(TestCase):
         )
 
         user = User(pk=8771, is_superuser=True)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         # test with mock request
-        self.assertTrue(self.gargoyle.is_active('test', self.gargoyle.as_request(user=user)))
+        assert self.gargoyle.is_active('test', self.gargoyle.as_request(user=user))
 
         # test date joined condition
         user = User(pk=8771)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -84,16 +85,16 @@ class APITest(TestCase):
         )
 
         user = User(pk=8771, date_joined=datetime.datetime(2011, 7, 2))
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=8771, date_joined=datetime.datetime(2012, 7, 2))
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=8771, date_joined=datetime.datetime(2011, 6, 2))
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         user = User(pk=8771, date_joined=datetime.datetime(2011, 7, 1))
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
@@ -103,13 +104,13 @@ class APITest(TestCase):
         )
 
         user = User(pk=8771, email="bob@example.com")
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=8771, email="bob2@example.com")
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         user = User(pk=8771)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
     def test_exclusions(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -135,16 +136,16 @@ class APITest(TestCase):
         )
 
         user = User(pk=0, username='foo', is_staff=False)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=0, username='foo', is_staff=True)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         user = User(pk=0, username='bar', is_staff=False)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         user = User(pk=0, username='bar', is_staff=True)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
     def test_only_exclusions(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -163,19 +164,19 @@ class APITest(TestCase):
 
         # username=='foo', so should be active
         user = User(pk=0, username='foo', is_staff=False)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         # username=='foo', so should be active
         user = User(pk=0, username='foo', is_staff=True)
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         # username=='bar', so should not be active
         user = User(pk=0, username='bar', is_staff=False)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         # username=='bar', so should not be active
         user = User(pk=0, username='bar', is_staff=True)
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
     def test_decorator_for_user(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -190,12 +191,14 @@ class APITest(TestCase):
         request = HttpRequest()
         request.user = self.user
 
-        self.assertRaises(Http404, test, request)
+        with pytest.raises(Http404):
+            test(request)
 
         switch.status = SELECTIVE
         switch.save()
 
-        self.assertRaises(Http404, test, request)
+        with pytest.raises(Http404):
+            test(request)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -203,7 +206,7 @@ class APITest(TestCase):
             condition='foo',
         )
 
-        self.assertTrue(test(request))
+        assert test(request)
 
     def test_decorator_for_ip_address(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
@@ -218,7 +221,8 @@ class APITest(TestCase):
         request = HttpRequest()
         request.META['REMOTE_ADDR'] = '192.168.1.1'
 
-        self.assertRaises(Http404, test, request)
+        with pytest.raises(Http404):
+            test(request)
 
         switch.status = SELECTIVE
         switch.save()
@@ -229,7 +233,7 @@ class APITest(TestCase):
             condition='192.168.1.1',
         )
 
-        self.assertTrue(test(request))
+        assert test(request)
 
         # add in a second condition, so that removing the first one won't kick
         # in the "no conditions returns is_active True for selective switches"
@@ -245,7 +249,8 @@ class APITest(TestCase):
             condition='192.168.1.1',
         )
 
-        self.assertRaises(Http404, test, request)
+        with pytest.raises(Http404):
+            test(request)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -253,7 +258,7 @@ class APITest(TestCase):
             condition='192.168.1.1',
         )
 
-        self.assertTrue(test(request))
+        assert test(request)
 
         switch.clear_conditions(
             condition_set=condition_set,
@@ -266,7 +271,7 @@ class APITest(TestCase):
             condition='50-100',
         )
 
-        self.assertTrue(test(request))
+        assert test(request)
 
         switch.clear_conditions(
             condition_set=condition_set,
@@ -278,7 +283,8 @@ class APITest(TestCase):
             condition='0-50',
         )
 
-        self.assertRaises(Http404, test, request)
+        with pytest.raises(Http404):
+            test(request)
 
     def test_decorator_with_redirect(self):
         Switch.objects.create(key='test', status=DISABLED)
@@ -291,31 +297,31 @@ class APITest(TestCase):
             return HttpResponse()
 
         response = test(request)
-        self.assertTrue(response.status_code, 302)
-        self.assertTrue('Location' in response)
-        self.assertTrue(response['Location'], '/foo')
+        assert response.status_code, 302
+        assert 'Location' in response
+        assert response['Location'] == '/foo'
 
         @switch_is_active('test', redirect_to='gargoyle_test_foo')
         def test2(request):
             return HttpResponse()
 
         response = test2(request)
-        self.assertTrue(response.status_code, 302)
-        self.assertTrue('Location' in response)
-        self.assertTrue(response['Location'], '')
+        assert response.status_code, 302
+        assert 'Location' in response
+        assert response['Location'] == '/'
 
     def test_global(self):
         switch = Switch.objects.create(key='test', status=DISABLED)
         switch = self.gargoyle['test']
 
-        self.assertFalse(self.gargoyle.is_active('test'))
-        self.assertFalse(self.gargoyle.is_active('test', self.user))
+        assert not self.gargoyle.is_active('test')
+        assert not self.gargoyle.is_active('test', self.user)
 
         switch.status = GLOBAL
         switch.save()
 
-        self.assertTrue(self.gargoyle.is_active('test'))
-        self.assertTrue(self.gargoyle.is_active('test', self.user))
+        assert self.gargoyle.is_active('test')
+        assert self.gargoyle.is_active('test', self.user)
 
     def test_disable(self):
         switch = Switch.objects.create(key='test')
@@ -325,20 +331,20 @@ class APITest(TestCase):
         switch.status = DISABLED
         switch.save()
 
-        self.assertFalse(self.gargoyle.is_active('test'))
+        assert not self.gargoyle.is_active('test')
 
-        self.assertFalse(self.gargoyle.is_active('test', self.user))
+        assert not self.gargoyle.is_active('test', self.user)
 
     def test_deletion(self):
         switch = Switch.objects.create(key='test')
 
         switch = self.gargoyle['test']
 
-        self.assertTrue('test' in self.gargoyle)
+        assert 'test' in self.gargoyle
 
         switch.delete()
 
-        self.assertFalse('test' in self.gargoyle)
+        assert 'test' not in self.gargoyle
 
     def test_expiration(self):
         switch = Switch.objects.create(key='test')
@@ -348,17 +354,17 @@ class APITest(TestCase):
         switch.status = DISABLED
         switch.save()
 
-        self.assertFalse(self.gargoyle.is_active('test'))
+        assert not self.gargoyle.is_active('test')
 
         Switch.objects.filter(key='test').update(value={}, status=GLOBAL)
 
         # cache shouldn't have expired
-        self.assertFalse(self.gargoyle.is_active('test'))
+        assert not self.gargoyle.is_active('test')
 
         cache_key = self.gargoyle.remote_cache_key
         # in memory cache shouldnt have expired
         cache.delete(cache_key)
-        self.assertFalse(self.gargoyle.is_active('test'))
+        assert not self.gargoyle.is_active('test')
         switch.status, switch.value = GLOBAL, {}
         # Ensure post save gets sent
         self.gargoyle._post_save(sender=None, instance=switch, created=False)
@@ -366,7 +372,7 @@ class APITest(TestCase):
         # any request should expire the in memory cache
         self.client.get('/')
 
-        self.assertTrue(self.gargoyle.is_active('test'))
+        assert self.gargoyle.is_active('test')
 
     def test_anonymous_user(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -380,7 +386,7 @@ class APITest(TestCase):
 
         user = AnonymousUser()
 
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -388,11 +394,11 @@ class APITest(TestCase):
             condition='1-10',
         )
 
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.clear_conditions(condition_set=condition_set)
 
-        self.assertFalse(self.gargoyle.is_active('test', user))
+        assert not self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -400,7 +406,7 @@ class APITest(TestCase):
             condition='1',
         )
 
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -408,7 +414,7 @@ class APITest(TestCase):
             condition='1-10',
         )
 
-        self.assertTrue(self.gargoyle.is_active('test', user))
+        assert self.gargoyle.is_active('test', user)
 
     def test_ip_address_internal_ips(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
@@ -419,7 +425,7 @@ class APITest(TestCase):
         request = HttpRequest()
         request.META['REMOTE_ADDR'] = '192.168.1.1'
 
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -428,9 +434,9 @@ class APITest(TestCase):
         )
 
         with override_settings(INTERNAL_IPS=['192.168.1.1']):
-            self.assertTrue(self.gargoyle.is_active('test', request))
+            assert self.gargoyle.is_active('test', request)
 
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
     def test_ip_address(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
@@ -441,7 +447,7 @@ class APITest(TestCase):
         request = HttpRequest()
         request.META['REMOTE_ADDR'] = '192.168.1.1'
 
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -449,7 +455,7 @@ class APITest(TestCase):
             condition='192.168.1.1',
         )
 
-        self.assertTrue(self.gargoyle.is_active('test', request))
+        assert self.gargoyle.is_active('test', request)
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
@@ -458,11 +464,11 @@ class APITest(TestCase):
             condition='127.0.0.1',
         )
 
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
         switch.clear_conditions(condition_set=condition_set)
 
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
         switch.add_condition(
             condition_set=condition_set,
@@ -470,10 +476,10 @@ class APITest(TestCase):
             condition='50-100',
         )
 
-        self.assertTrue(self.gargoyle.is_active('test', request))
+        assert self.gargoyle.is_active('test', request)
 
         # test with mock request
-        self.assertTrue(self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='192.168.1.1')))
+        assert self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='192.168.1.1'))
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
@@ -481,9 +487,9 @@ class APITest(TestCase):
             field_name='percent',
             condition='0-50',
         )
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
-        self.assertTrue(self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='::1')))
+        assert self.gargoyle.is_active('test', self.gargoyle.as_request(ip_address='::1'))
 
         switch.clear_conditions(condition_set=condition_set)
         switch.add_condition(
@@ -491,7 +497,7 @@ class APITest(TestCase):
             field_name='percent',
             condition='0-50',
         )
-        self.assertFalse(self.gargoyle.is_active('test', request))
+        assert not self.gargoyle.is_active('test', request)
 
     def test_to_dict(self):
         condition_set = 'gargoyle.builtins.IPAddressConditionSet'
@@ -512,35 +518,23 @@ class APITest(TestCase):
 
         result = switch.to_dict(self.gargoyle)
 
-        self.assertTrue('label' in result)
-        self.assertEquals(result['label'], 'my switch')
-
-        self.assertTrue('status' in result)
-        self.assertEquals(result['status'], SELECTIVE)
-
-        self.assertTrue('description' in result)
-        self.assertEquals(result['description'], 'foo bar baz')
-
-        self.assertTrue('key' in result)
-        self.assertEquals(result['key'], 'test')
-
-        self.assertTrue('conditions' in result)
-        self.assertEquals(len(result['conditions']), 1)
+        assert result['label'] == 'my switch'
+        assert result['status'] == SELECTIVE
+        assert result['description'] == 'foo bar baz'
+        assert result['key'] == 'test'
+        assert len(result['conditions']) == 1
 
         condition = result['conditions'][0]
-        self.assertTrue('id' in condition)
-        self.assertEquals(condition['id'], condition_set)
-        self.assertTrue('label' in condition)
-        self.assertEquals(condition['label'], 'IP Address')
-        self.assertTrue('conditions' in condition)
-        self.assertEquals(len(condition['conditions']), 1)
+        assert condition['id'] == condition_set
+        assert condition['label'] == 'IP Address'
+        assert len(condition['conditions']) == 1
 
         inner_condition = condition['conditions'][0]
-        self.assertEquals(len(inner_condition), 4)
-        self.assertTrue(inner_condition[0], 'ip_address')
-        self.assertTrue(inner_condition[1], '192.168.1.1')
-        self.assertTrue(inner_condition[2], '192.168.1.1')
-        self.assertFalse(inner_condition[3])
+        assert len(inner_condition) == 4
+        assert inner_condition[0] == 'ip_address'
+        assert inner_condition[1] == '192.168.1.1'
+        assert inner_condition[2] == '192.168.1.1'
+        assert not inner_condition[3]
 
     def test_remove_condition(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -554,7 +548,7 @@ class APITest(TestCase):
         user5 = User(pk=5, email='5@example.com')
 
         # inactive if selective with no conditions
-        self.assertFalse(self.gargoyle.is_active('test', user5))
+        assert not self.gargoyle.is_active('test', user5)
 
         user8771 = User(pk=8771, email='8771@example.com', is_superuser=True)
         switch.add_condition(
@@ -562,9 +556,9 @@ class APITest(TestCase):
             field_name='is_superuser',
             condition='1',
         )
-        self.assertTrue(self.gargoyle.is_active('test', user8771))
+        assert self.gargoyle.is_active('test', user8771)
         # No longer is_active for user5 as we have other conditions
-        self.assertFalse(self.gargoyle.is_active('test', user5))
+        assert not self.gargoyle.is_active('test', user5)
 
         switch.remove_condition(
             condition_set=condition_set,
@@ -573,8 +567,8 @@ class APITest(TestCase):
         )
 
         # back to inactive for everyone with no conditions
-        self.assertFalse(self.gargoyle.is_active('test', user5))
-        self.assertFalse(self.gargoyle.is_active('test', user8771))
+        assert not self.gargoyle.is_active('test', user5)
+        assert not self.gargoyle.is_active('test', user8771)
 
     def test_switch_defaults(self):
         """Test that defaults pulled from GARGOYLE_SWITCH_DEFAULTS.
@@ -582,20 +576,16 @@ class APITest(TestCase):
         Requires SwitchManager to use auto_create.
 
         """
-        self.assertTrue(self.gargoyle.is_active('active_by_default'))
-        self.assertFalse(self.gargoyle.is_active('inactive_by_default'))
-        self.assertEquals(
-            self.gargoyle['inactive_by_default'].label,
-            'Default Inactive',
-        )
-        self.assertEquals(
-            self.gargoyle['active_by_default'].label,
-            'Default Active',
-        )
+        assert self.gargoyle.is_active('active_by_default')
+        assert not self.gargoyle.is_active('inactive_by_default')
+
+        assert self.gargoyle['inactive_by_default'].label == 'Default Inactive'
+        assert self.gargoyle['active_by_default'].label == 'Default Active'
+
         active_by_default = self.gargoyle['active_by_default']
         active_by_default.status = DISABLED
         active_by_default.save()
-        self.assertFalse(self.gargoyle.is_active('active_by_default'))
+        assert not self.gargoyle.is_active('active_by_default')
 
     def test_invalid_condition(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -609,7 +599,7 @@ class APITest(TestCase):
         user5 = User(pk=5, email='5@example.com')
 
         # inactive if selective with no conditions
-        self.assertFalse(self.gargoyle.is_active('test', user5))
+        assert not self.gargoyle.is_active('test', user5)
 
         user8771 = User(pk=8771, email='8771@example.com', is_superuser=True)
         switch.add_condition(
@@ -617,7 +607,7 @@ class APITest(TestCase):
             field_name='foo',
             condition='1',
         )
-        self.assertFalse(self.gargoyle.is_active('test', user8771))
+        assert not self.gargoyle.is_active('test', user8771)
 
     def test_inheritance(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -636,42 +626,42 @@ class APITest(TestCase):
         switch = self.gargoyle['test']
 
         user = User(pk=5)
-        self.assertTrue(self.gargoyle.is_active('test:child', user))
+        assert self.gargoyle.is_active('test:child', user)
 
         user = User(pk=8771)
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         switch = self.gargoyle['test']
         switch.status = DISABLED
 
         user = User(pk=5)
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         user = User(pk=8771)
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         switch = self.gargoyle['test']
         switch.status = GLOBAL
 
         user = User(pk=5)
-        self.assertTrue(self.gargoyle.is_active('test:child', user))
+        assert self.gargoyle.is_active('test:child', user)
 
         user = User(pk=8771)
-        self.assertTrue(self.gargoyle.is_active('test:child', user))
+        assert self.gargoyle.is_active('test:child', user)
 
     def test_parent_override_child_state(self):
         Switch.objects.create(key='test', status=DISABLED)
 
         Switch.objects.create(key='test:child', status=GLOBAL)
 
-        self.assertFalse(self.gargoyle.is_active('test:child'))
+        assert not self.gargoyle.is_active('test:child')
 
     def test_child_state_is_used(self):
         Switch.objects.create(key='test', status=GLOBAL)
 
         Switch.objects.create(key='test:child', status=DISABLED)
 
-        self.assertFalse(self.gargoyle.is_active('test:child'))
+        assert not self.gargoyle.is_active('test:child')
 
     def test_parent_override_child_condition(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -689,12 +679,12 @@ class APITest(TestCase):
         Switch.objects.create(key='test:child', status=GLOBAL)
 
         user = User(username='bob')
-        self.assertTrue(self.gargoyle.is_active('test:child', user))
+        assert self.gargoyle.is_active('test:child', user)
 
         user = User(username='joe')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
-        self.assertFalse(self.gargoyle.is_active('test:child'))
+        assert not self.gargoyle.is_active('test:child')
 
     def test_child_condition_differing_than_parent_loses(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -720,15 +710,15 @@ class APITest(TestCase):
         )
 
         user = User(username='bob')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         user = User(username='joe')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         user = User(username='john')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
-        self.assertFalse(self.gargoyle.is_active('test:child'))
+        assert not self.gargoyle.is_active('test:child')
 
     def test_child_condition_including_parent_wins(self):
         condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
@@ -759,12 +749,12 @@ class APITest(TestCase):
         )
 
         user = User(username='bob')
-        self.assertTrue(self.gargoyle.is_active('test:child', user))
+        assert self.gargoyle.is_active('test:child', user)
 
         user = User(username='joe')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
         user = User(username='john')
-        self.assertFalse(self.gargoyle.is_active('test:child', user))
+        assert not self.gargoyle.is_active('test:child', user)
 
-        self.assertFalse(self.gargoyle.is_active('test:child'))
+        assert not self.gargoyle.is_active('test:child')
