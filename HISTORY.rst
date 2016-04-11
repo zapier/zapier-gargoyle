@@ -8,6 +8,8 @@ Pending Release
 ---------------
 
 * New release notes here
+* Bugfix for `@switches` which didn't work on `TestCase` classes properly in
+  1.2.2.
 
 1.2.2 (2016-04-11)
 ------------------

@@ -10,7 +10,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import inspect
 import sys
 import unittest
-from functools import wraps
 
 from gargoyle import gargoyle
 from .compat import ContextDecorator
@@ -108,13 +107,6 @@ class SwitchContextManager(TestCaseContextDecorator):
             True: gargoyle.GLOBAL,
             False: gargoyle.DISABLED,
         }
-
-    def __call__(self, func):
-        @wraps(func)
-        def inner(*args, **kwargs):
-            with self:
-                return func(*args, **kwargs)
-        return inner
 
     def __enter__(self):
         self.patch()

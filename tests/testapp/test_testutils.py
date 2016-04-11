@@ -63,7 +63,7 @@ class SwitchContextManagerClassTest(TestCase):
         super(SwitchContextManagerClassTest, self).setUp()
         self.su_switch_value = gargoyle['my_switch_name']
 
-    def test_it(self):
+    def test_it_applied_at_all_levels(self):
         assert self.suc_switch_value
         assert self.su_switch_value
         assert gargoyle['my_switch_name']
