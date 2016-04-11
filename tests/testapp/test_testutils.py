@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from django.test import TestCase
 
+from gargoyle import gargoyle
 from gargoyle.manager import SwitchManager
 from gargoyle.models import DISABLED, GLOBAL, Switch
 from gargoyle.testutils import switches
@@ -48,3 +49,21 @@ class SwitchContextManagerTest(TestCase):
             assert not self.gargoyle.is_active('test')
 
         assert self.gargoyle['test'].status == GLOBAL
+
+
+@switches(my_switch_name=True)
+class SwitchContextManagerClassTest(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(SwitchContextManagerClassTest, cls).setUpClass()
+        cls.suc_switch_value = gargoyle['my_switch_name']
+
+    def setUp(self):
+        super(SwitchContextManagerClassTest, self).setUp()
+        self.su_switch_value = gargoyle['my_switch_name']
+
+    def test_it(self):
+        assert self.suc_switch_value
+        assert self.su_switch_value
+        assert gargoyle['my_switch_name']

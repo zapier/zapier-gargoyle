@@ -57,6 +57,11 @@ setup(
         'nexus-yplan>=1.2.0',
         'django-jsonfield>=0.9.2,!=0.9.13',
     ],
+    extras_require={
+        ':python_version=="2.7"': [
+            'contextdecorator',
+        ]
+    },
     license='Apache License 2.0',
     include_package_data=True,
     classifiers=[

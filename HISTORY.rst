@@ -12,6 +12,11 @@ Pending Release
   Gargoyle only supports Django 1.8+.
 * Added all ``__future__`` imports to all files for Python 2.7/3
   compatibility.
+* Made ``@switches`` usable as a class decorator for ``unittest.TestCase``
+  classes as well, where it applies from ``setUpClass`` through all tests to
+  ``tearDownClass``. This adds a dependency on ``contextdecorator`` on Python
+  2.7.
+
 
 1.2.1 (2016-02-25)
 ------------------
