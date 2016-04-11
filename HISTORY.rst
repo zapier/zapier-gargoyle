@@ -8,6 +8,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.2.2 (2016-04-11)
+------------------
+
 * Removed the South Migrations, since South doesn't support Django 1.7+, and
   Gargoyle only supports Django 1.8+.
 * Added all ``__future__`` imports to all files for Python 2.7/3
@@ -16,7 +20,6 @@ Pending Release
   classes as well, where it applies from ``setUpClass`` through all tests to
   ``tearDownClass``. This adds a dependency on ``contextdecorator`` on Python
   2.7.
-
 
 1.2.1 (2016-02-25)
 ------------------
