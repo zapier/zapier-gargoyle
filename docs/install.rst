@@ -43,8 +43,7 @@ submodules and Python 2.7, you'll need to ensure your imports are not relative i
 Nexus Frontend
 --------------
 
-While Gargoyle can be used without a frontend, we highly recommend using `Nexus
-<https://github.com/YPlan/nexus-yplan>`_.
+While Gargoyle can be used without a frontend, we highly recommend using `Nexus <https://github.com/YPlan/nexus>`_.
 
 Nexus will automatically detect Gargoyle's ``NexusModule``, assuming its autodiscovery is on. If not, you will need to
 register the module by hand:
