@@ -8,6 +8,8 @@ Pending Release
 ---------------
 
 * New release notes here
+* Added a migration to tidy up ``bytes`` versus ``str`` for ``choices`` on
+  ``Switch.status``. It's no-op as ``choices`` is in-memory only.
 
 1.2.3 (2016-04-11)
 ------------------
