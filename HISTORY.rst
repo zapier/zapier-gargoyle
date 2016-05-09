@@ -8,7 +8,11 @@ Pending Release
 ---------------
 
 * New release notes here
-* Remove debug prints from ``conditions.py`` which spammed your WSGI logs.
+
+1.2.5 (2016-05-09)
+------------------
+
+* Removed debug prints from ``conditions.py`` which spammed your WSGI logs.
 
 1.2.4 (2016-05-02)
 ------------------
