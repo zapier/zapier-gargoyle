@@ -37,8 +37,8 @@ If you are upgrading from the original to this fork, you will need to run the fo
 
     pip uninstall django-modeldict gargoyle
 
-Failing to do this will mean that ``pip uninstall gargoyle`` will also erase the files for `gargoyle-yplan`, and
-similarly for our `django-modeldict` fork.
+Failing to do this will mean that ``pip uninstall gargoyle`` will also erase the files for ``gargoyle-yplan``, and
+similarly for our ``django-modeldict`` fork.
 
 Documentation
 -------------
