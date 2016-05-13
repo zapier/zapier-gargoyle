@@ -104,8 +104,11 @@ class SwitchManager(ModelDict):
         """
 
         if callable(condition_set):
-            condition_set = condition_set()
-        self._registry[condition_set.get_id()] = condition_set
+            registerable = condition_set()
+        else:
+            registerable = condition_set
+        self._registry[registerable.get_id()] = registerable
+        return condition_set
 
     def unregister(self, condition_set):
         """
@@ -114,8 +117,11 @@ class SwitchManager(ModelDict):
         >>> gargoyle.unregister(condition_set)
         """
         if callable(condition_set):
-            condition_set = condition_set()
-        self._registry.pop(condition_set.get_id(), None)
+            registerable = condition_set()
+        else:
+            registerable = condition_set
+        popped = self._registry.pop(registerable.get_id(), None)
+        return (popped is not None)
 
     def get_condition_set_by_id(self, switch_id):
         """

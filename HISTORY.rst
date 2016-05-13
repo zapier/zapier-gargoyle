@@ -8,6 +8,9 @@ Pending Release
 ---------------
 
 * New release notes here
+* Made ``gargoyle.register()`` usable as a decorator
+* Made ``gargoyle.unregister()`` return the boolean value of whether something
+  was unregistered.
 
 1.2.5 (2016-05-09)
 ------------------

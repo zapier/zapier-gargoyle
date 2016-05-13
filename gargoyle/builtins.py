@@ -58,6 +58,7 @@ class IPAddress(String):
         return value
 
 
+@gargoyle.register
 class IPAddressConditionSet(RequestConditionSet):
     percent = Percent()
     ip_address = IPAddress(label='IP Address')
@@ -90,9 +91,8 @@ class IPAddressConditionSet(RequestConditionSet):
     def get_group_label(self):
         return 'IP Address'
 
-gargoyle.register(IPAddressConditionSet())
 
-
+@gargoyle.register
 class HostConditionSet(ConditionSet):
     hostname = String()
 
@@ -108,5 +108,3 @@ class HostConditionSet(ConditionSet):
 
     def get_group_label(self):
         return 'Host'
-
-gargoyle.register(HostConditionSet())

@@ -30,6 +30,28 @@ class APITest(TestCase):
         self.gargoyle.register(UserConditionSet(User))
         self.gargoyle.register(IPAddressConditionSet())
 
+    def test_register_unregister_class(self):
+        klass = IPAddressConditionSet
+        registered = self.gargoyle.register(IPAddressConditionSet)
+        assert registered is klass
+
+        unregistered = self.gargoyle.unregister(klass)
+        assert unregistered
+
+        unregistered = self.gargoyle.unregister(klass)
+        assert not unregistered
+
+    def test_register_unregister_instance(self):
+        condition_set = IPAddressConditionSet()
+        registered = self.gargoyle.register(condition_set)
+        assert registered is condition_set
+
+        unregistered = self.gargoyle.unregister(condition_set)
+        assert unregistered
+
+        unregistered = self.gargoyle.unregister(condition_set)
+        assert not unregistered
+
     def test_builtin_registration(self):
         assert 'gargoyle.builtins.UserConditionSet(auth.user)' in self.gargoyle._registry
         assert 'gargoyle.builtins.IPAddressConditionSet' in self.gargoyle._registry
