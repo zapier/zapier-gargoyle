@@ -26,8 +26,8 @@ Pending Release
 1.2.3 (2016-04-11)
 ------------------
 
-* Bugfix for `@switches` which didn't work on `TestCase` classes properly in
-  1.2.2.
+* Bugfix for ``@switches`` which didn't work on ``TestCase`` classes properly
+  in 1.2.2.
 
 1.2.2 (2016-04-11)
 ------------------
@@ -47,7 +47,7 @@ Pending Release
 * Simplified autodiscovery code to use ``AppConfig.ready()``. It's no longer
   necessary to add a call to ``gargoyle.autodiscover()`` in your ``urls.py``,
   when not using Nexus.
-* Fixed url `patterns` warnings that appear on Django 1.9
+* Fixed url ``patterns`` warnings that appear on Django 1.9
 
 1.2.0 (2016-02-12)
 ------------------
@@ -94,7 +94,7 @@ Pending Release
 
 * Better support for Django 1.6 and Django 1.7
 * Dropped support for Django 1.2 and Django 1.3
-* Use `model_name` in favour of `module_name` if available (deprecation in Django 1.6)
+* Use ``model_name`` in favour of ``module_name`` if available (deprecation in Django 1.6)
 * DateTimeFields now utilize the auto_now=True kwarg
 * Travis now tests on Django 1.6/Django 1.7
 
