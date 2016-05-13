@@ -331,7 +331,7 @@ class APITest(TestCase):
         response = test2(request)
         assert response.status_code, 302
         assert 'Location' in response
-        assert response['Location'] == '/'
+        assert response['Location'] == '/foo/'
 
     def test_global(self):
         switch = Switch.objects.create(key='test', status=DISABLED)
