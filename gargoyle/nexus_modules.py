@@ -276,7 +276,7 @@ class GargoyleModule(nexus.NexusModule):
         field_name = request.POST.get("field")
         value = request.POST.get("value")
 
-        if not all([key, condition_set_id, field_name, value]):
+        if not all([key, condition_set_id, field_name]):
             raise GargoyleException("Fields cannot be empty")
 
         switch = gargoyle[key]

@@ -11,6 +11,7 @@ Pending Release
 * Made ``gargoyle.register()`` usable as a decorator
 * Made ``gargoyle.unregister()`` return the boolean value of whether something
   was unregistered.
+* Fixed removing conditions where the value is the empty string.
 
 1.2.5 (2016-05-09)
 ------------------

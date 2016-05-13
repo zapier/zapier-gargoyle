@@ -590,6 +590,23 @@ class APITest(TestCase):
         assert not self.gargoyle.is_active('test', user5)
         assert not self.gargoyle.is_active('test', user8771)
 
+    def test_add_condition_empty(self):
+        condition_set = 'gargoyle.builtins.UserConditionSet(auth.user)'
+
+        switch = Switch.objects.create(key='test', status=SELECTIVE)
+        switch = self.gargoyle['test']
+
+        user_empty = User(email='')
+        user_non_empty = User(email='test@example.com')
+        switch.add_condition(
+            condition_set=condition_set,
+            field_name='email',
+            condition='',
+        )
+
+        assert self.gargoyle.is_active('test', user_empty)
+        assert not self.gargoyle.is_active('test', user_non_empty)
+
     def test_switch_defaults(self):
         """Test that defaults pulled from GARGOYLE_SWITCH_DEFAULTS.
 
