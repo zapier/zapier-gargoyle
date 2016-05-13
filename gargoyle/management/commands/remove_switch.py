@@ -1,16 +1,16 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
+from django.utils import six
 
 from gargoyle.models import Switch
 
 
 class Command(BaseCommand):
-    args = 'switch_name'
     help = 'Removes the specified gargoyle switch.'
 
-    def handle(self, *args, **kwargs):
-        if len(args) != 1:
-            raise CommandError("Specify a gargoyle switch name to remove.")
+    def add_arguments(self, parser):
+        parser.add_argument('switch_name', type=six.text_type)
 
-        Switch.objects.filter(key=args[0]).delete()
+    def handle(self, *args, **options):
+        Switch.objects.filter(key=options['switch_name']).delete()

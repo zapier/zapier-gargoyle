@@ -1,35 +1,27 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from optparse import make_option
-
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
+from django.utils import six
 
 from gargoyle.models import DISABLED, GLOBAL, Switch
 
 
 class Command(BaseCommand):
-    args = 'switch_name'
     help = 'Adds or updates the specified gargoyle switch.'
 
-    option_list = BaseCommand.option_list + (
-        make_option(
-            '--disabled',
-            action='store_const',
-            const=DISABLED,
-            default=GLOBAL,
-            dest='status',
-            help='Create a disabled switch.'),
-    )
+    def add_arguments(self, parser):
+        parser.add_argument('switch_name', type=six.text_type)
+        parser.add_argument('--disabled', dest='status', action='store_const',
+                            default=GLOBAL, const=DISABLED,
+                            help='Create a disabled switch.')
 
-    def handle(self, *args, **kwargs):
-        if len(args) != 1:
-            raise CommandError("Specify a gargoyle switch name to add.")
-
-        status = kwargs['status']
+    def handle(self, *args, **options):
         switch, created = Switch.objects.get_or_create(
-            key=args[0],
-            defaults=dict(status=status),
+            key=options['switch_name'],
+            defaults={
+                'status': options['status']
+            },
         )
-        if not created and switch.status != status:
-            switch.status = status
+        if not created and switch.status != options['status']:
+            switch.status = options['status']
             switch.save()
