@@ -8,6 +8,9 @@ Gargoyle
 .. image:: https://travis-ci.org/YPlan/gargoyle.svg?branch=master
     :target: https://travis-ci.org/YPlan/gargoyle
 
+.. image:: https://readthedocs.org/projects/gargoyle-yplan/badge/?version=latest
+        :target: https://gargoyle-yplan.readthedocs.io/en/latest/
+
 Gargoyle is a platform built on top of Django which allows you to switch functionality of your application on and off
 based on conditions.
 
@@ -43,4 +46,4 @@ similarly for our ``django-modeldict`` fork.
 Documentation
 -------------
 
-The documentation is available at `Read The Docs <http://gargoyle-yplan.readthedocs.org/>`_.
+The documentation is available at `Read The Docs <https://gargoyle-yplan.readthedocs.io/>`_.
