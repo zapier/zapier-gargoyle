@@ -1,9 +1,12 @@
 #!/usr/bin/env python
+from __future__ import absolute_import, division, print_function
+
+import codecs
 import os
 import re
 import sys
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 def get_version(package):
@@ -28,10 +31,10 @@ if sys.argv[-1] == 'publish':
     print("  git push --tags")
     sys.exit()
 
-with open('README.rst') as readme_file:
+with codecs.open('README.rst', 'r', encoding='utf-8') as readme_file:
     readme = readme_file.read()
 
-with open('HISTORY.rst') as history_file:
+with codecs.open('HISTORY.rst', 'r', encoding='utf-8') as history_file:
     history = history_file.read().replace('.. :changelog:', '')
 
 setup(
