@@ -8,6 +8,10 @@ Pending Release
 ---------------
 
 * New release notes here
+
+1.2.6 (2016-08-03)
+------------------
+
 * Set requirements to exclude ``django-jsonfield==1.0.0`` which is broken for
   PostgreSQL - use ``1.0.1+`` instead.
 * Made ``gargoyle.register()`` usable as a decorator
