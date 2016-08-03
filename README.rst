@@ -23,7 +23,7 @@ Requirements
 Tested with all combinations of:
 
 * Python: 2.7, 3.5
-* Django: 1.8, 1.9
+* Django: 1.8, 1.9, 1.10
 
 Install
 -------

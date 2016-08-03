@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from django.core.management import call_command
 
 
-def test_no_migrations_required():
+def test_no_migrations_required(db):
     try:
         call_command('makemigrations', 'gargoyle', exit=1)
     except SystemExit:
