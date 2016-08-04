@@ -1,4 +1,4 @@
 -r ../tests/requirements.txt
 django-modeldict-yplan
-Django>=1.9,<1.10
+Django
 nexus-yplan
