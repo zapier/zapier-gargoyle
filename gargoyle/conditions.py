@@ -14,8 +14,7 @@ import itertools
 from django.core.validators import ValidationError
 from django.http import HttpRequest
 from django.utils import six
-from django.utils.html import escape
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 from gargoyle.models import EXCLUDE
 
@@ -51,7 +50,7 @@ class Field(object):
         return value
 
     def render(self, value):
-        return mark_safe('<input type="text" value="%s" name="%s"/>' % (escape(value or ''), escape(self.name)))
+        return format_html('<input type="text" value="{value}" name="{name}"/>', value=value or '', name=self.name)
 
     def display(self, value):
         return value
@@ -63,7 +62,7 @@ class Boolean(Field):
         return bool(value)
 
     def render(self, value):
-        return mark_safe('<input type="hidden" value="1" name="%s"/>' % (escape(self.name),))
+        return format_html('<input type="hidden" value="1" name="{name}"/>', name=self.name)
 
     def display(self, value):
         return self.label
@@ -123,12 +122,13 @@ class Range(Field):
     def render(self, value):
         if not value:
             value = ['', '']
-        return mark_safe(
-            '<input type="text" value="%s" placeholder="from" name="%s[min]"/>'
-            '%% - '
-            '<input type="text" placeholder="to" value="%s" name="%s[max]"/>%%'
-            %
-            (escape(value[0]), escape(self.name), escape(value[1]), escape(self.name))
+        return format_html(
+            '<input type="text" value="{value_form}" placeholder="from" name="{name}[min]"/>%'
+            ' - '
+            '<input type="text" placeholder="to" value="{value_to}" name="{name}[max]"/>%',
+            value_form=value[0],
+            value_to=value[1],
+            name=self.name
         )
 
     def display(self, value):
@@ -189,7 +189,7 @@ class AbstractDate(Field):
         if not value:
             value = datetime.date.today().strftime(self.DATE_FORMAT)
 
-        return mark_safe('<input type="text" value="%s" name="%s"/>' % (escape(value), escape(self.name)))
+        return format_html('<input type="text" value="{value}" name="{name}"/>', value=value, name=self.name)
 
     def is_active(self, condition, value):
         assert isinstance(value, datetime.date)
