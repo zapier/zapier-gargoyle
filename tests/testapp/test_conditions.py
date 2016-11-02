@@ -1,10 +1,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import datetime
+
 import pytest
 from django.core.validators import ValidationError
 from django.test import TestCase
 
-from gargoyle.conditions import ConditionSet, Range
+from gargoyle.conditions import AbstractDate, BeforeDate, ConditionSet, OnOrAfterDate, Percent, Range
 from gargoyle.manager import SwitchManager
 from gargoyle.models import SELECTIVE, Switch
 
@@ -71,6 +73,81 @@ class RangeTests(TestCase):
         condition = Range()
         with pytest.raises(ValidationError):
             condition.clean('1-2-3')
+
+
+class PercentTests(TestCase):
+    def test_clean_success(self):
+        condition = Percent()
+        assert condition.clean('0-50') == '0-50'
+
+    def test_clean_fail_no_first_number(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('-50')
+
+    def test_clean_fail_no_second_number(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('10-')
+
+    def test_clean_fail_no_numbers(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('-')
+
+    def test_clean_fail_empty(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('')
+
+    def test_clean_fail_out_of_range(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('10-160')
+
+    def test_clean_first_greater_than_second(self):
+        condition = Percent()
+        with pytest.raises(ValidationError):
+            condition.clean('80-20')
+
+
+class AbstractDateTests(TestCase):
+    def test_clean_success(self):
+        condition = AbstractDate()
+        assert condition.clean('2016-01-01') == '2016-01-01'
+
+    def test_clean_failed(self):
+        condition = AbstractDate()
+        with pytest.raises(ValidationError):
+            condition.clean("20160101")
+
+
+class BeforeDateTests(TestCase):
+    def test_is_active_date_less(self):
+        condition = BeforeDate()
+        assert condition.is_active("2016-08-05", datetime.date(2016, 8, 2))
+
+    def test_is_active_date_equal(self):
+        condition = BeforeDate()
+        assert not condition.is_active("2016-08-05", datetime.date(2016, 8, 5))
+
+    def test_is_active_date_greater(self):
+        condition = BeforeDate()
+        assert not condition.is_active("2016-08-05", datetime.date(2016, 8, 10))
+
+
+class OnOrAfterDateTests(TestCase):
+    def test_is_active_date_less(self):
+        condition = OnOrAfterDate()
+        assert not condition.is_active("2016-08-05", datetime.date(2016, 8, 2))
+
+    def test_is_active_date_equal(self):
+        condition = OnOrAfterDate()
+        assert condition.is_active("2016-08-05", datetime.date(2016, 8, 5))
+
+    def test_is_active_date_greater(self):
+        condition = OnOrAfterDate()
+        assert condition.is_active("2016-08-05", datetime.date(2016, 8, 10))
 
 
 class NumberConditionSet(ConditionSet):

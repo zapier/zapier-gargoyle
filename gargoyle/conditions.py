@@ -181,7 +181,7 @@ class AbstractDate(Field):
         try:
             date = self.str_to_date(value)
         except ValueError as e:
-            raise ValidationError("Date must be a valid date in the format YYYY-MM-DD.\n(%s)" % e.message)
+            raise ValidationError("Date must be a valid date in the format YYYY-MM-DD.\n(%s)" % six.text_type(e))
 
         return date.strftime(self.DATE_FORMAT)
 
