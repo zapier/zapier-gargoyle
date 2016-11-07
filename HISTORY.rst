@@ -8,6 +8,9 @@ Pending Release
 ---------------
 
 * New release notes here
+* Added three built-in condition sets for checking if it's before or after the
+  current date - ``UTCTodayConditionSet``, ``AppTodayConditionSet``, and
+  ``ActiveTimezoneTodayConditionSet``.
 
 1.2.6 (2016-08-03)
 ------------------

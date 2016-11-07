@@ -1,8 +1,10 @@
 docutils
 flake8
+freezegun
 isort
 multilint
 Pygments
+pytz
 pytest
 pytest-cov
 pytest-django

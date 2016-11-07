@@ -10,14 +10,17 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import socket
 import struct
 
+from datetime import datetime
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
 from django.core.validators import validate_ipv4_address
+from django.utils import timezone
 
 from gargoyle import gargoyle
 from gargoyle.conditions import (
-    Boolean, ConditionSet, ModelConditionSet, OnOrAfterDate, Percent, RequestConditionSet, String
+    BeforeDate, Boolean, ConditionSet, ModelConditionSet,
+    OnOrAfterDate, Percent, RequestConditionSet, String
 )
 
 User = get_user_model()
@@ -109,3 +112,74 @@ class HostConditionSet(ConditionSet):
 
     def get_group_label(self):
         return 'Host'
+
+
+@gargoyle.register
+class UTCTodayConditionSet(ConditionSet):
+    """
+    Checks conditions against current time in UTC
+    """
+    today_is_on_or_after = OnOrAfterDate('in UTC on or after')
+    today_is_before = BeforeDate('in UTC before')
+
+    def get_namespace(self):
+        return 'now_utc'
+
+    def can_execute(self, instance):
+        return instance is None
+
+    def get_field_value(self, instance, field_name):
+        return datetime.utcnow()
+
+    def get_group_label(self):
+        return 'Today'
+
+
+@gargoyle.register
+class AppTodayConditionSet(ConditionSet):
+    """
+    Checks conditions against current app timezone time or
+    against current server time if Django timezone support disabled (USE_TZ=False)
+    """
+    today_is_on_or_after = OnOrAfterDate('in default timezone on or after')
+    today_is_before = BeforeDate('in default timezone before')
+
+    def get_namespace(self):
+        return 'now_app_tz'
+
+    def can_execute(self, instance):
+        return instance is None
+
+    def get_field_value(self, instance, field_name):
+        now_dt = timezone.now()
+        if timezone.is_aware(now_dt):
+            now_dt = timezone.make_naive(now_dt, timezone.get_default_timezone())
+        return now_dt
+
+    def get_group_label(self):
+        return 'Today'
+
+
+@gargoyle.register
+class ActiveTimezoneTodayConditionSet(ConditionSet):
+    """
+    Checks conditions against current time of active timezone or
+    against current server time if Django timezone support disabled (USE_TZ=False)
+    """
+    today_is_on_or_after = OnOrAfterDate('in active timezone on or after')
+    today_is_before = BeforeDate('in active timezone before')
+
+    def get_namespace(self):
+        return 'now_active_tz'
+
+    def can_execute(self, instance):
+        return instance is None
+
+    def get_field_value(self, instance, field_name):
+        now_dt = timezone.now()
+        if timezone.is_aware(now_dt):
+            now_dt = timezone.make_naive(now_dt)
+        return now_dt
+
+    def get_group_label(self):
+        return 'Today'
