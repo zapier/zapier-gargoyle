@@ -49,6 +49,7 @@ class UserConditionSet(ModelConditionSet):
             return bool(condition)
         return None
 
+
 gargoyle.register(UserConditionSet(User))
 
 

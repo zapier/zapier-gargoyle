@@ -129,4 +129,5 @@ class SwitchContextManager(TestCaseContextDecorator):
     def unpatch(self):
         self.gargoyle.is_active = self.is_active_func
 
+
 switches = SwitchContextManager

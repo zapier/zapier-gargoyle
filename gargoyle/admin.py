@@ -17,4 +17,5 @@ class SwitchAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ('label', 'key', 'value')
 
+
 admin.site.register(Switch, SwitchAdmin)

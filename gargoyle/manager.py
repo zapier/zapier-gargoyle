@@ -165,4 +165,5 @@ def make_gargoyle():
 
     return SwitchManager(Switch, **kwargs)
 
+
 gargoyle = SimpleLazyObject(make_gargoyle)

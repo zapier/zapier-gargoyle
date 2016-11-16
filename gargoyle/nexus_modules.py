@@ -303,4 +303,5 @@ class GargoyleModule(nexus.NexusModule):
         fields = ['label', 'date_created', 'date_modified']
         return fields + ['-' + f for f in fields]
 
+
 nexus.site.register(GargoyleModule, 'gargoyle')
