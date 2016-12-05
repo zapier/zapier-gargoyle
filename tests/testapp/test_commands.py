@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import pytest
+import six
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test import TestCase
@@ -15,8 +16,10 @@ class CommandAddSwitchTestCase(TestCase):
         self.gargoyle = SwitchManager(Switch, key='key', value='value', instances=True, auto_create=True)
 
     def test_fails_with_no_arg(self):
-        with pytest.raises(CommandError):
+        with pytest.raises(CommandError) as excinfo:
             call_command('add_switch')
+
+        assert "No switch name specified. Please provide one." in six.text_type(excinfo.value)
 
     def test_fails_with_more_than_one_arg(self):
         with pytest.raises(CommandError):
@@ -61,8 +64,10 @@ class CommandRemoveSwitchTestCase(TestCase):
         self.gargoyle = SwitchManager(Switch, key='key', value='value', instances=True, auto_create=True)
 
     def test_fails_with_no_arg(self):
-        with pytest.raises(CommandError):
+        with pytest.raises(CommandError) as excinfo:
             call_command('remove_switch')
+
+        assert "No switch name specified. Please provide one." in six.text_type(excinfo.value)
 
     def test_fails_with_more_than_one_arg(self):
         with pytest.raises(CommandError):

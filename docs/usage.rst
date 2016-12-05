@@ -126,3 +126,30 @@ You may also optionally pass an instance of ``SwitchManager`` as the first argum
     def test_context_manager_alt_gargoyle():
         with switches(gargoyle, my_switch_name=True):
             assert gargoyle.is_active('my_switch_name')  # passes
+
+Management Commands
+~~~~~~~~~~~~~~~~~~~
+
+Gargoyle includes management commands which can be useful for task automation (e.g. deployment automation)
+
+``add_switch``
+##############
+
+`Adds or updates the specified gargoyle switch.`
+
+To create a globally enabled switch or enable an existed switch::
+
+    manage.py add_switch switch_name
+
+To create a disabled switch or disable an existed switch::
+
+    manage.py add_switch --disabled switch_name
+
+``remove_switch``
+#################
+
+`Removes the specified gargoyle switch.`
+
+Usage::
+
+    manage.py remove_switch switch_name

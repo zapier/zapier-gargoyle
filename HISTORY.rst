@@ -8,6 +8,7 @@ Pending Release
 ---------------
 
 * New release notes here
+* Added missing argument message and documents for management commands
 
 1.2.7 (2016-12-01)
 ------------------

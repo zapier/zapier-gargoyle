@@ -8,6 +8,7 @@ from gargoyle.models import DISABLED, GLOBAL, Switch
 
 class Command(BaseCommand):
     help = 'Adds or updates the specified gargoyle switch.'
+    missing_args_message = 'No switch name specified. Please provide one.'
 
     def add_arguments(self, parser):
         parser.add_argument('switch_name', type=six.text_type)
