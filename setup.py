@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function
 import codecs
 import os
 import re
-import sys
 
 from setuptools import find_packages, setup
 
@@ -18,19 +17,6 @@ def get_version(package):
 
 
 version = get_version('gargoyle')
-
-
-if sys.argv[-1] == 'publish':
-    if os.system("pip freeze | grep twine"):
-        print("twine not installed.\nUse `pip install twine`.\nExiting.")
-        sys.exit()
-    os.system("rm -rf .eggs/ build/ dist/")
-    os.system("python setup.py sdist bdist_wheel")
-    os.system("twine upload dist/*")
-    print("You probably want to also tag the version now:")
-    print("  git tag -a v%s -m 'Version %s'" % (version, version))
-    print("  git push --tags")
-    sys.exit()
 
 with codecs.open('README.rst', 'r', encoding='utf-8') as readme_file:
     readme = readme_file.read()
