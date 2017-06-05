@@ -12,7 +12,6 @@ from django.views.generic.base import RedirectView
 
 from gargoyle.compat import subinclude
 
-
 admin.autodiscover()
 nexus.autodiscover()
 

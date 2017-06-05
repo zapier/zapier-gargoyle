@@ -7,7 +7,6 @@ import pytz
 from django.test import RequestFactory, TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
-
 from freezegun import freeze_time
 
 from gargoyle.builtins import (

@@ -12,6 +12,7 @@ import sys
 import unittest
 
 from gargoyle import gargoyle
+
 from .compat import ContextDecorator
 
 

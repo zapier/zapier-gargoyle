@@ -9,8 +9,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import socket
 import struct
-
 from datetime import datetime
+
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
@@ -19,8 +19,7 @@ from django.utils import timezone
 
 from gargoyle import gargoyle
 from gargoyle.conditions import (
-    BeforeDate, Boolean, ConditionSet, ModelConditionSet,
-    OnOrAfterDate, Percent, RequestConditionSet, String
+    BeforeDate, Boolean, ConditionSet, ModelConditionSet, OnOrAfterDate, Percent, RequestConditionSet, String
 )
 
 User = get_user_model()
